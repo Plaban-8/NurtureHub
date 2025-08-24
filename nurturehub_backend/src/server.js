@@ -1,14 +1,13 @@
+import dotenv from "dotenv";
+dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
-import dotenv from "dotenv";
 import { controller } from "./app/controller.js";
-dotenv.config();
+
 
 const app = express();
 
 const uri = process.env.URI;
-
-
 
 app.use(express.json({ limit: "5mb" }));
 
@@ -21,4 +20,4 @@ mongoose
 
 controller(app);
 
-app.listen(4000);
+app.listen(1789);
