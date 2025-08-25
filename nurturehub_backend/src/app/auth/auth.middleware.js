@@ -12,7 +12,9 @@ export const authenticate = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    console.log('Decoded JWT:', decoded); // Debugging line
     req.id = decoded.id;
+    req.email = decoded.email;
 
     next();
   } catch (e) {
