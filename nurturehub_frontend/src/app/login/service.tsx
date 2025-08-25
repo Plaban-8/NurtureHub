@@ -4,7 +4,7 @@ import { tokenManagementService } from "../tokenManagement/service";
 import { LoginDTO } from "./model";
 
 export const login = async (data: LoginDTO) => {
-  const response = await fetch("http://localhost:1789/auth/login", {
+  const response = await fetch("http://localhost:4000/auth/login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

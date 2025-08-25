@@ -3,7 +3,7 @@
 import { RegisterDTO } from "./model";
 
 export const signUpService = async (data: RegisterDTO) => {
-  const response = await fetch("http://localhost:1789/auth/signup", {
+  const response = await fetch("http://localhost:4000/auth/signup", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
