@@ -45,7 +45,7 @@ export default function HomePage() {
                       </div>
                   </div>
                 </Link>
-                <Link href="#">
+                <Link href="/community">
                   <div className="h-full rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow p-6">
                       <div className="flex items-center gap-2 mb-4">
                          <Users className="text-primary" />
@@ -56,7 +56,7 @@ export default function HomePage() {
                       </div>
                   </div>
                 </Link>
-                <Link href="#">
+                <Link href="/marketplace">
                   <div className="h-full rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow p-6">
                       <div className="flex items-center gap-2 mb-4">
                          <ShoppingCart className="text-primary" />
@@ -67,7 +67,7 @@ export default function HomePage() {
                       </div>
                   </div>
                 </Link>
-                <Link href="#">
+                <Link href="/expert-solution">
                   <div className="h-full rounded-lg border bg-card text-card-foreground shadow-sm hover:shadow-lg transition-shadow p-6">
                       <div className="flex items-center gap-2 mb-4">
                          <Lightbulb className="text-primary" />
