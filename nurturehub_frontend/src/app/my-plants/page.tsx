@@ -2,19 +2,20 @@
 
 import { useState, useRef, ChangeEvent, FormEvent } from 'react';
 import Image from 'next/image';
-import { Leaf, Upload, PlusCircle } from 'lucide-react';
+import { Leaf, Upload, PlusCircle, Trash2, Droplet } from 'lucide-react';
 
 interface Plant {
   id: number;
   name: string;
   species: string;
   photo: string;
+  lastWatered?: string;
 }
 
 export default function MyPlantsPage() {
   const [plants, setPlants] = useState<Plant[]>([
-    { id: 1, name: 'Ferdinand', species: 'Fiddle Leaf Fig', photo: 'https://placehold.co/600x400.png' },
-    { id: 2, name: 'Spike', species: 'Snake Plant', photo: 'https://placehold.co/600x400.png' },
+    { id: 1, name: 'Ferdinand', species: 'Fiddle Leaf Fig', photo: 'https://placehold.co/600x400.png', lastWatered: '2 days ago' },
+    { id: 2, name: 'Spike', species: 'Snake Plant', photo: 'https://placehold.co/600x400.png', lastWatered: '1 week ago' },
   ]);
   const [newPlantName, setNewPlantName] = useState('');
   const [newPlantSpecies, setNewPlantSpecies] = useState('');
@@ -37,12 +38,16 @@ export default function MyPlantsPage() {
     e.preventDefault();
     if (newPlantName && newPlantSpecies && newPlantPhoto) {
       const newPlant: Plant = {
-        id: plants.length + 1,
+        id: Date.now(), // Use timestamp for a unique ID
         name: newPlantName,
         species: newPlantSpecies,
         photo: newPlantPhoto,
+        lastWatered: 'Not yet watered',
       };
-      setPlants([...plants, newPlant]);
+      // Simulate API call to add a plant
+      setPlants(prevPlants => [newPlant, ...prevPlants]);
+      
+      // Reset form
       setNewPlantName('');
       setNewPlantSpecies('');
       setNewPlantPhoto(null);
@@ -53,6 +58,21 @@ export default function MyPlantsPage() {
     } else {
         alert("Please fill out all fields and upload a photo.")
     }
+  };
+
+  const handleDeletePlant = (plantId: number) => {
+    // Simulate API call to delete a plant
+    setPlants(plants.filter(plant => plant.id !== plantId));
+  };
+
+  const handleWaterPlant = (plantId: number) => {
+    // Simulate API call to update watering status
+    setPlants(plants.map(plant => 
+      plant.id === plantId 
+        ? { ...plant, lastWatered: new Date().toLocaleDateString() } 
+        : plant
+    ));
+    alert('Watering logged!');
   };
   
   const triggerPhotoUpload = () => {
@@ -121,13 +141,26 @@ export default function MyPlantsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {plants.map((plant) => (
-          <div key={plant.id} className="rounded-lg bg-white shadow-md overflow-hidden">
+          <div key={plant.id} className="rounded-lg bg-white shadow-md overflow-hidden flex flex-col">
             <div className="relative h-64 w-full">
-                <Image src={plant.photo} alt={plant.name} layout="fill" objectFit="cover" />
+                <Image src={plant.photo} alt={plant.name} layout="fill" objectFit="cover" data-ai-hint="potted plant" />
+                 <button onClick={() => handleDeletePlant(plant.id)} className="absolute top-2 right-2 bg-white/70 rounded-full p-2 text-gray-600 hover:text-red-500 hover:bg-white transition-all">
+                    <Trash2 size={20} />
+                </button>
             </div>
-            <div className="p-6">
-              <h3 className="text-xl font-bold text-gray-800">{plant.name}</h3>
-              <p className="text-md text-gray-600">{plant.species}</p>
+            <div className="p-6 flex-grow flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-gray-800">{plant.name}</h3>
+                <p className="text-md text-gray-600">{plant.species}</p>
+                <p className="text-sm text-gray-500 mt-2">Last watered: {plant.lastWatered}</p>
+              </div>
+               <button 
+                  onClick={() => handleWaterPlant(plant.id)}
+                  className="mt-4 w-full flex items-center justify-center gap-2 rounded-md border border-primary/50 bg-primary/10 px-4 py-2 text-sm font-medium text-primary shadow-sm hover:bg-primary/20"
+                >
+                    <Droplet size={16} />
+                    Log Watering
+               </button>
             </div>
           </div>
         ))}
