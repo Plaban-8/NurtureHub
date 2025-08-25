@@ -1,0 +1,20 @@
+"use server";
+
+import { tokenManagementService } from "../tokenManagement/service";
+import { LoginDTO } from "./model";
+
+export const login = async (data: LoginDTO) => {
+  const response = await fetch("http://localhost:1789/auth/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  if (!response.ok) {
+    alert("Login failed. Please try again.");
+    throw new Error("Login failed");
+  }
+  const result = await response.json();
+  await tokenManagementService(result.token);
+};

@@ -1,7 +1,9 @@
+"use server"
+
 import Cookies from 'js-cookie';
 import { cookies } from 'next/headers';
 
-export const tokenManagementService = (token: string)=>{
+export const tokenManagementService = async (token: string)=>{
     try {
         Cookies.remove("token");
         Cookies.set("token", token, {expires: 1});
