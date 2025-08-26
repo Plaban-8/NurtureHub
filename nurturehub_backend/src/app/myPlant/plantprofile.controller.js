@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { plantCreationService } from "./plantprofile.service.js";
+import { getPlantService, plantCreationService } from "./plantprofile.service.js";
 import { authenticate } from "../auth/auth.middleware.js";
 
 export const plantProfileController = Router();

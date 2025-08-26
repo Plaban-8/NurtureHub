@@ -1,23 +1,29 @@
-"use server"
+"use server";
 
-import Cookies from 'js-cookie';
-import { cookies } from 'next/headers';
+import { cookies } from "next/headers";
 
-export const tokenManagementService = async (token: string)=>{
-    try {
-        Cookies.remove("token");
-        Cookies.set("token", token, {expires: 1});
-    } catch (error) {
-        console.error("Error setting token:", error);
-    }
-}
+// Save token in cookies
+export const tokenManagementService = async (token: string) => {
+  try {
+    const cookieStore = await cookies(); // ✅ must await in Next.js 15.3+
+    cookieStore.set("token", token, {
+      httpOnly: true,
+      secure: true,
+      path: "/",
+      maxAge: 60 * 60 * 24, // 1 day
+    });
+  } catch (error) {
+    console.error("Error setting token:", error);
+  }
+};
 
-export const getToken = async ()=>{
-    try{
-    const cookieStore = await cookies();
-    return cookieStore.get("token")?.value;
-    }catch (error) {
-        console.error("Error retrieving token:", error);
-        return null;
-    }
-}
+// Get token from cookies
+export const getToken = async () => {
+  try {
+    const cookieStore = await cookies(); // ✅ must await
+    return cookieStore.get("token")?.value || null;
+  } catch (error) {
+    console.error("Error retrieving token:", error);
+    return null;
+  }
+};

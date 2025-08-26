@@ -10,20 +10,17 @@ const plantSchema = new mongoose.Schema(
     species: {
       type: String,
       required: true,
-      unique: true,
     },
     photo: {
       type: String,
-      required: true,
-      unique: true,
       lowercase: true,
     },
     userId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,   
+      required: true,
     },
-},
+  },
   { timestamps: true },
   { colleciton: "users" }
 );
