@@ -1,5 +1,6 @@
 import { savePlant } from "./plantprofile.repo.js";
 import { getPlant } from "./plantprofile.repo.js";
+import { deletePlant } from "./plantprofile.repo.js";
 
 export const plantCreationService = async (data) => {
     try{
@@ -32,3 +33,20 @@ export const getPlantService = async (userId) => {
     }
 
 }   
+
+export const deletePlantService = async (id) => {
+    try{
+        await deletePlant(id);
+        return {
+            message: "Plant profile deleted successfully.",
+            success: true,
+        }
+    }
+    catch(err) {
+        console.log(err);
+        return {
+        message: "Failed to delete plant profile.",
+        success: false,
+        }
+    }
+}

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
 import Image from "next/image";
 import { Leaf, Upload, PlusCircle, Trash2, Droplet } from "lucide-react";
 import { plantDTO } from "./model";
-import { getPlantsByUserId, savePlant } from "./service";
+import { getPlantsByUserId, savePlant, deletePlantById } from "./service";
 
 interface Props {
   data: {
@@ -26,6 +26,7 @@ export default function MyPlantsView(props: Props) {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const data: plantDTO = {
+      _id: "", // backend will generate ID
       name: form.name,
       species: form.species,
       photo: form.photo ?? "", // fallback
@@ -40,6 +41,14 @@ export default function MyPlantsView(props: Props) {
       alert("Failed to add plant. Please try again.");
     }
   };
+
+  const deletePlant = async (id: string) => {
+    try{
+      await deletePlantById(id);
+    }catch(err){
+      console.error("Error deleting plant:", err);
+    }
+  }
 
   const handlePhotoUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.[0]) return;
@@ -168,7 +177,7 @@ export default function MyPlantsView(props: Props) {
                 className="object-cover"
               />
 
-              <button className="absolute top-2 right-2 bg-white/70 rounded-full p-2 text-gray-600 hover:text-red-500 transition">
+              <button onClick={() => deletePlant(plant._id)} className="absolute top-2 right-2 bg-white/70 rounded-full p-2 text-gray-600 hover:text-red-500 transition">
                 <Trash2 size={20} />
               </button>
             </div>

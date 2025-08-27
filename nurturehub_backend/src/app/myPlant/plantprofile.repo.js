@@ -18,3 +18,7 @@ export const getPlant = async (id) => {
     data: null,
   };
 };
+
+export const deletePlant = async (id) => {
+  return await Plant.findByIdAndDelete({ _id: id });
+};

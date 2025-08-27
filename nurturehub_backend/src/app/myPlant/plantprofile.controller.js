@@ -1,11 +1,10 @@
 import { Router } from "express";
 import { getPlantService, plantCreationService } from "./plantprofile.service.js";
 import { authenticate } from "../auth/auth.middleware.js";
-
+import  { deletePlantService } from "./plantprofile.service.js";
 export const plantProfileController = Router();
 
 plantProfileController.post('/',authenticate, async (req , res) => {
-    console.log(req.email);
 
     const data = {
         name: req.body.name,
@@ -54,4 +53,26 @@ plantProfileController.get('/',authenticate, async (req , res) => {
             message: err.message,
         });
     }
+});
+
+plantProfileController.delete('/', async (req, res) => {
+    const id = req.body.id;
+    try{
+        const response = await deletePlantService(id);
+        if (response.success){
+            return res.status(200).json({
+                message: response.message,
+                status: 200
+            })
+        }
+        return res.status(403).json({
+            message: response.message,
+            status: 403
+        })
+    }catch(err){
+        return res.json({
+            message: err.message,
+        });
+    }
+
 });

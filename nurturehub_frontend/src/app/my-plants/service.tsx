@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { getToken } from "../tokenManagement/service";
 import { plantDTO } from "./model";
 
@@ -13,6 +14,7 @@ export const savePlant = async (data: plantDTO) => {
     },
     body: JSON.stringify(data),
   });
+  revalidatePath("/my-plants");
   if (!response.ok) {
     throw new Error("Failed to save plant");
   }
@@ -21,7 +23,7 @@ export const savePlant = async (data: plantDTO) => {
 
 export const getPlantsByUserId = async () => {
   const token = await getToken();
-  console.log(token);
+  
 
   const response = await fetch(`http://localhost:4000/myplant`, {
     method: "GET",
@@ -33,6 +35,19 @@ export const getPlantsByUserId = async () => {
     throw new Error("Failed to fetch plants");
   }
   const plants = await response.json();
-  console.log("gay: ", plants);
   return plants.data as plantDTO[];
+};
+
+export const deletePlantById = async (id: string) => {
+  const response = await fetch(`http://localhost:4000/myplant/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ id }),
+  });
+  revalidatePath("/my-plants");
+  if (!response.ok) {
+    throw new Error("Failed to delete plant");
+  }
 };
