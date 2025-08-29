@@ -16,8 +16,7 @@ export default function LoginPage() {
 
     try {
       await login(data);
-      alert("Login successful.");
-      window.location.href = "/";
+      window.location.href = "/home";
     } catch (error) {
       alert("Login Failed");
     }

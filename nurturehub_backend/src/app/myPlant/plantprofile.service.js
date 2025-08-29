@@ -11,7 +11,6 @@ export const plantCreationService = async (data) => {
         }
     }
     catch(err) {
-        console.log(err);
         return {
         message: "Failed to create plant profile.",
         success: false,

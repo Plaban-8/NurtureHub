@@ -33,7 +33,6 @@ export default function MyPlantsView(props: Props) {
     };
     try {
       await savePlant(data);
-      alert("Plant added successfully!");
       setForm({ name: "", species: "", photo: null });
       setIsAddingPlant(false);
     } catch (error) {
