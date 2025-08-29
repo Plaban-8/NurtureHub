@@ -23,8 +23,7 @@ export default function SignupPage() {
         alert("Password does not match.");
       }
       await signUpService(data);
-      alert("Signup Done.");
-      window.location.href = "/";
+      window.location.href = "/login";
     } catch (err) {
       alert(err);
     }

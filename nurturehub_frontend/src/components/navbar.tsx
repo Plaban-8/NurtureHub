@@ -3,13 +3,20 @@
 
 import Link from 'next/link';
 import { Leaf, LogOut } from 'lucide-react';
+import { logout } from '@/app/login/service';
+
 
 export function Navbar() {
+    const doLogout = async () => {
+        await logout();
+        window.location.href = '/login';
+    }
+
   const navLinkClasses = "transition-colors text-gray-600 hover:text-gray-900 font-semibold";
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-white">
       <div className="container flex h-20 items-center">
-        <Link href="/" className="mr-6 flex items-center space-x-2">
+        <Link href="/home" className="mr-6 flex items-center space-x-2">
           <Leaf className="h-8 w-8 text-green-600" />
           <span className="font-bold text-2xl" style={{ fontFamily: 'sans-serif' }}>NurtureHub</span>
         </Link>
@@ -61,7 +68,7 @@ export function Navbar() {
            <a href="/dashboard" className={`${navLinkClasses} inline-flex h-10 items-center justify-center`}>
               Profile
            </a>
-           <a href="/login" className={`${navLinkClasses} inline-flex h-10 items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900`}>
+           <a onClick = {doLogout} className={`${navLinkClasses} inline-flex h-10 items-center justify-center rounded-md bg-gray-100 px-4 py-2 text-sm font-medium text-gray-900`}>
               Sign Out
            </a>
         </div>

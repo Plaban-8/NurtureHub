@@ -6,7 +6,6 @@ export const savePlant = async (data) => {
 
 export const getPlant = async (id) => {
   const plants = await Plant.find({ userId: id });
-  console.log("diddy", plants);
   if (plants) {
     return {
       status: true,

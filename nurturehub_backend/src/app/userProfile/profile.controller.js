@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { authenticate } from "../auth/auth.middleware";
-
+import { authenticate } from "../auth/auth.middleware.js";
+import { getUserService } from "./profile.service.js";
 export const profileController = Router();
 
 profileController.get('/', authenticate,async (req , res) => {
@@ -25,3 +25,5 @@ profileController.get('/', authenticate,async (req , res) => {
     }
 
 });
+
+profileController.put('/update', authenticate, async (req, res) => {});

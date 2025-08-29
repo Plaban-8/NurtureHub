@@ -25,4 +25,3 @@ signupController.post("/", async (req, res) => {
   });
 });
 
-//localhost:1789/auth/signup
