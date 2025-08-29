@@ -421,122 +421,7 @@ export default function DashboardView(props: Props) {
             </div>
           </div>
         );
-      case "notifications":
-        return (
-          <div className="rounded-lg bg-white shadow-md">
-            <div className="border-b border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-800">Notifications</h2>
-              <p className="mt-1 text-sm text-gray-500">
-                Manage your notification settings.
-              </p>
-            </div>
-            <div className="p-6">
-              <form onSubmit={handleNotificationsSubmit} className="space-y-6">
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                  <div>
-                    <label
-                      htmlFor="communicationEmails"
-                      className="text-base font-medium text-gray-900"
-                    >
-                      Communication emails
-                    </label>
-                    <p className="text-sm text-gray-500">
-                      Receive emails about your account activity.
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    id="communicationEmails"
-                    checked={notifications.communicationEmails}
-                    onChange={(e) =>
-                      setNotifications({
-                        ...notifications,
-                        communicationEmails: e.target.checked,
-                      })
-                    }
-                    className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                  />
-                </div>
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                  <div>
-                    <label
-                      htmlFor="marketingEmails"
-                      className="text-base font-medium text-gray-900"
-                    >
-                      Marketing emails
-                    </label>
-                    <p className="text-sm text-gray-500">
-                      Receive emails about new products, features, and more.
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    id="marketingEmails"
-                    checked={notifications.marketingEmails}
-                    onChange={(e) =>
-                      setNotifications({
-                        ...notifications,
-                        marketingEmails: e.target.checked,
-                      })
-                    }
-                    className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                  />
-                </div>
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                  <div>
-                    <label
-                      htmlFor="socialEmails"
-                      className="text-base font-medium text-gray-900"
-                    >
-                      Social emails
-                    </label>
-                    <p className="text-sm text-gray-500">
-                      Receive emails for friend requests, follows, and more.
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    id="socialEmails"
-                    checked={notifications.socialEmails}
-                    onChange={(e) =>
-                      setNotifications({
-                        ...notifications,
-                        socialEmails: e.target.checked,
-                      })
-                    }
-                    className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                  />
-                </div>
-                <div className="flex items-center justify-between rounded-lg border p-4 bg-gray-50">
-                  <div>
-                    <label
-                      htmlFor="securityEmails"
-                      className="text-base font-medium text-gray-900"
-                    >
-                      Security emails
-                    </label>
-                    <p className="text-sm text-gray-500">
-                      Receive emails about your account security.
-                    </p>
-                  </div>
-                  <input
-                    type="checkbox"
-                    id="securityEmails"
-                    checked={notifications.securityEmails}
-                    disabled
-                    className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                  />
-                </div>
-                <button
-                  type="submit"
-                  className="flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                >
-                  Update Notifications
-                </button>
-              </form>
-            </div>
-          </div>
-        );
+
       case "plant-preferences":
         return (
           <div className="rounded-lg bg-white shadow-md">
@@ -693,16 +578,7 @@ export default function DashboardView(props: Props) {
               >
                 Shared Posts
               </button>
-              <button
-                onClick={() => setActiveTab("notifications")}
-                className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${
-                  activeTab === "notifications"
-                    ? "border-green-500 text-green-600"
-                    : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                }`}
-              >
-                Notifications
-              </button>
+
               <button
                 onClick={() => setActiveTab("plant-preferences")}
                 className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${
