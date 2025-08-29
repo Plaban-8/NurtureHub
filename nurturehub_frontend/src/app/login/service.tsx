@@ -13,7 +13,7 @@ export const login = async (data: LoginDTO) => {
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-    alert("Login failed. Please try again.");
+
     throw new Error("Login failed");
   }
   const result = await response.json();

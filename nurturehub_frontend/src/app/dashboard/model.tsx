@@ -3,3 +3,9 @@ export interface userDTO {
     email: string,
     phone: string
 }
+
+export interface PasswordFormState {
+  currentPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
+}

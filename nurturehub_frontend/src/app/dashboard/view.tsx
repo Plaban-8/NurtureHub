@@ -3,8 +3,9 @@
 import { useState, FormEvent, useEffect } from "react";
 import { Mail, Phone, Trash2 } from "lucide-react";
 import Image from "next/image";
-import { userDTO } from "./model";
-import { updateUser } from "./service";
+import { PasswordFormState, userDTO } from "./model";
+import { changePassword, updateUser } from "./service";
+import { set } from "date-fns";
 
 // Models
 
@@ -37,12 +38,6 @@ interface ProfileInfoFormState {
   name: string;
   email: string;
   phone: string;
-}
-
-interface PasswordFormState {
-  currentPassword?: string;
-  newPassword?: string;
-  confirmPassword?: string;
 }
 
 interface NotificationsFormState {
@@ -139,20 +134,24 @@ export default function DashboardView(props: Props) {
       alert("Failed to update profile. Please try again.");
     }
 
-    // TODO: Add API call to update user profile info
     console.log("Profile info updated:", profileInfo);
   };
 
   const handlePasswordSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (password.newPassword !== password.confirmPassword) {
-      alert("New passwords do not match.");
-      return;
+    const data: PasswordFormState = {
+      currentPassword: password.currentPassword || "",
+      newPassword: password.newPassword || "",
+      confirmPassword: password.confirmPassword || "",
+    };
+
+    try {
+      changePassword(data as PasswordFormState);
+      alert("Password changed successfully!");
+    } catch (err) {
+      console.error("Error changing password:", err);
+      alert("Failed to change password. Please try again.");
     }
-    // TODO: Add API call to update user password
-    //console.log("Password change requested for:", profileInfo.email);
-    alert("Password updated successfully!");
-    setPassword({}); // Reset password form
   };
 
   const handleNotificationsSubmit = (e: FormEvent<HTMLFormElement>) => {
