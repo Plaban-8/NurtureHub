@@ -1,9 +1,11 @@
 "use server";
+import dotenv from "dotenv";
+dotenv.config();
 
 import { DiagnosePlantOutput } from "./model";
 
-const API_URL = "https://plant.id/api/v3/identification";
-const API_KEY = "yscUERwoW0AzYMu9snnpt8z8Z03QrqIn2kmGtq0jTdWJgSvK7l"; // ✅ expose env for client-side
+const API_URL = process.env.NEXT_PUBLIC_API_URL as string;
+const API_KEY = process.env.NEXT_PUBLIC_API_KEY as string;
 
 export const getDiagnosisFromAPI = async (
   photoDataUri: string

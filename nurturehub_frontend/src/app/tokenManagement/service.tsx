@@ -2,7 +2,6 @@
 
 import { cookies } from "next/headers";
 
-// Save token in cookies
 export const tokenManagementService = async (token: string) => {
   try {
     const cookieStore = await cookies(); // ✅ must await in Next.js 15.3+
@@ -17,7 +16,7 @@ export const tokenManagementService = async (token: string) => {
   }
 };
 
-// Get token from cookies
+
 export const getToken = async () => {
   try {
     const cookieStore = await cookies(); // ✅ must await
