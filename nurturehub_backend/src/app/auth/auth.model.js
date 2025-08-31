@@ -18,14 +18,16 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
-
     password: {
       type: String,
       required: true,
-    }
+    },
+    avatar: {
+      type: String, // URL or Base64 string
+      default: "/default-avatar.png",
+    },
   },
-  { timestamps: true },
-  { colleciton: "users" }
+  { timestamps: true, collection: "users" }
 );
 
 export const User = mongoose.model("User", userSchema);

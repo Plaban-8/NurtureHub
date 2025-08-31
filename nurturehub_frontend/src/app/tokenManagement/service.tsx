@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 
 export const tokenManagementService = async (token: string) => {
   try {
-    const cookieStore = await cookies(); // ✅ must await in Next.js 15.3+
+    const cookieStore = await cookies();
     cookieStore.set("token", token, {
       httpOnly: true,
       secure: true,
@@ -19,7 +19,7 @@ export const tokenManagementService = async (token: string) => {
 
 export const getToken = async () => {
   try {
-    const cookieStore = await cookies(); // ✅ must await
+    const cookieStore = await cookies();
     return cookieStore.get("token")?.value || null;
   } catch (error) {
     console.error("Error retrieving token:", error);

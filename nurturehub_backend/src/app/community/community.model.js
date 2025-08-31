@@ -1,15 +1,11 @@
 import mongoose from "mongoose";
 
-const plantSchema = new mongoose.Schema(
+const communitySchema = new mongoose.Schema(
   {
-    name: {
+    content: {
       type: String,
       required: true,
       trim: true,
-    },
-    species: {
-      type: String,
-      required: true,
     },
     photo: {
       type: String,
@@ -22,7 +18,7 @@ const plantSchema = new mongoose.Schema(
     },
   },
   { timestamps: true },
-  { colleciton: "plants" }
+  { colleciton: "community" }
 );
 
-export const Plant = mongoose.model("Plant", plantSchema);
+export const Community = mongoose.model("Community", communitySchema);
