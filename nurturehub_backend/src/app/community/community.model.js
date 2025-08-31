@@ -16,9 +16,33 @@ const communitySchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    comments: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
+        text: {
+          type: String,
+          required: true,
+          trim: true,
+        },
+        createdAt: {
+          type: Date,
+          default: Date.now,
+        },
+      },
+    ],
   },
-  { timestamps: true },
-  { colleciton: "community" }
+  {
+    timestamps: true,
+    collection: "community",
+  }
 );
 
 export const Community = mongoose.model("Community", communitySchema);

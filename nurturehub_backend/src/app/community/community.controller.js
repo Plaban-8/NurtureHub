@@ -30,9 +30,10 @@ communityController.post("/", authenticate, async (req, res) => {
   }
 });
 
-communityController.get("/allPosts", authenticate, async (req, res) => {
+communityController.get("/", async (req, res) => {
   try {
     const response = await getAllPostsService();
+    console.log(response.data)
     if (response.success) {
       res.status(200).json({
         data: response.data,

@@ -5,5 +5,12 @@ export const savePost = async (data) => {
 };
 
 export const getAllPosts = async () => {
-   
+   const posts = await Community.find()
+  .populate("userId", "name avatar")
+  .populate("comments.userId", "name avatar") 
+  .select("content photo likes createdAt comments userId")
+  .lean();
+
+  return posts;
+
 }

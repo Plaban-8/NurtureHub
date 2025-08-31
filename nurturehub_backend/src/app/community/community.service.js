@@ -1,6 +1,8 @@
-import { savePost } from "./community.repo.js";
+
+import { savePost, getAllPosts } from "./community.repo.js";
 
 export const postService = async (data) => {
+  
   try {
     await savePost(data);
     return {
@@ -19,7 +21,7 @@ export const getAllPostsService = async () => {
   try {
     const result = await getAllPosts();
     return {
-      data: result.data,
+      data: result,
       success: true
     };
   } catch (err) {

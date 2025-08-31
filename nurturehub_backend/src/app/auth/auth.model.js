@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema(
     },
     avatar: {
       type: String, // URL or Base64 string
-      default: "/default-avatar.png",
+      default: "https://placehold.co/100x100.png",
     },
   },
   { timestamps: true, collection: "users" }
