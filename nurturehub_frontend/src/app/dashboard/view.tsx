@@ -6,7 +6,7 @@ import Image from "next/image";
 import { PasswordFormState, userDTO } from "./model";
 import { changePassword, updateUser } from "./service";
 import { set } from "date-fns";
-
+import { Leaf } from "lucide-react";
 // Models
 
 interface Props {
@@ -40,26 +40,65 @@ interface ProfileInfoFormState {
   phone: string;
 }
 
-interface NotificationsFormState {
-  communicationEmails: boolean;
-  marketingEmails: boolean;
-  socialEmails: boolean;
-  securityEmails: boolean;
+interface PlantSuggestionQuery {
+  experience: 'beginner' | 'intermediate' | 'expert';
+  light: 'low' | 'medium' | 'high';
+  type: 'flower' | 'fruit' | 'herb';
 }
 
-interface PlantPreferencesFormState {
-  experienceLevel: "beginner" | "intermediate" | "expert";
-  plantTypes: string[];
-  lightCondition: "low" | "medium" | "high";
-}
-
-const plantTypesOptions = [
-  { id: "flowers", label: "Flowers" },
-  { id: "succulents", label: "Succulents" },
-  { id: "ferns", label: "Ferns" },
-  { id: "herbs", label: "Herbs" },
-  { id: "vegetables", label: "Vegetables" },
-];
+const suggestions = {
+  beginner: {
+    low: {
+      flower: 'Peace Lily (Spathiphyllum)',
+      fruit: 'Alpine Strawberry',
+      herb: 'Mint',
+    },
+    medium: {
+      flower: 'Marigold',
+      fruit: 'Bush Beans',
+      herb: 'Basil',
+    },
+    high: {
+      flower: 'Sunflower',
+      fruit: 'Cherry Tomatoes',
+      herb: 'Rosemary',
+    },
+  },
+  intermediate: {
+    low: {
+      flower: 'Begonia',
+      fruit: 'Currants',
+      herb: 'Parsley',
+    },
+    medium: {
+      flower: 'Petunia',
+      fruit: 'Bell Peppers',
+      herb: 'Cilantro',
+    },
+    high: {
+      flower: 'Rose',
+      fruit: 'Cucumber',
+      herb: 'Thyme',
+    },
+  },
+  expert: {
+    low: {
+      flower: 'Orchid',
+      fruit: 'Pawpaw',
+      herb: 'Chervil',
+    },
+    medium: {
+      flower: 'Dahlia',
+      fruit: 'Eggplant',
+      herb: 'Tarragon',
+    },
+    high: {
+      flower: 'Hibiscus',
+      fruit: 'Watermelon',
+      herb: 'Lavender',
+    },
+  },
+};
 
 const staticSharedPosts: Post[] = [
   {
@@ -104,18 +143,12 @@ export default function DashboardView(props: Props) {
   // State for forms
 
   const [password, setPassword] = useState<PasswordFormState>({});
-  const [notifications, setNotifications] = useState<NotificationsFormState>({
-    communicationEmails: true,
-    marketingEmails: true,
-    socialEmails: false,
-    securityEmails: true,
+
+  const [suggestionQuery, setSuggestionQuery] = useState<PlantSuggestionQuery>({
+    experience: 'beginner',
+    light: 'low',
+    type: 'flower',
   });
-  const [plantPreferences, setPlantPreferences] =
-    useState<PlantPreferencesFormState>({
-      experienceLevel: "beginner",
-      plantTypes: ["flowers", "succulents"],
-      lightCondition: "medium",
-    });
 
   // Controller/Service Logic for Forms
   const handleProfileInfoSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -154,28 +187,14 @@ export default function DashboardView(props: Props) {
     }
   };
 
-  const handleNotificationsSubmit = (e: FormEvent<HTMLFormElement>) => {
+
+  const handlePlantSuggestionSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // TODO: Add API call to update notification settings
-    console.log("Notifications updated:", notifications);
-    alert("Notifications updated successfully!");
+    const { experience, light, type } = suggestionQuery;
+    const suggestion = suggestions[experience][light][type];
+    alert(`Try growing: ${suggestion}`);
   };
 
-  const handlePlantPreferencesSubmit = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    // TODO: Add API call to update plant preferences
-    console.log("Plant preferences updated:", plantPreferences);
-    alert("Plant preferences updated successfully!");
-  };
-
-  const handlePlantTypeChange = (plantId: string) => {
-    setPlantPreferences((prev) => {
-      const plantTypes = prev.plantTypes.includes(plantId)
-        ? prev.plantTypes.filter((id) => id !== plantId)
-        : [...prev.plantTypes, plantId];
-      return { ...prev, plantTypes };
-    });
-  };
 
   const handleDeleteSharedPost = (postId: number) => {
     // TODO: Add API call to delete the shared post from the user's profile
@@ -422,103 +441,75 @@ export default function DashboardView(props: Props) {
           </div>
         );
 
-      case "plant-preferences":
+      case 'plant-suggestion':
         return (
           <div className="rounded-lg bg-white shadow-md">
-            <div className="border-b border-gray-200 p-6">
-              <h2 className="text-xl font-bold text-gray-800">
-                Plant Preferences
-              </h2>
-              <p className="mt-1 text-sm text-gray-500">
-                Set your preferences for plant care and recommendations.
-              </p>
+             <div className="border-b border-gray-200 p-6">
+                <h2 className="text-xl font-bold text-gray-800">Plant Suggestion</h2>
+                <p className="mt-1 text-sm text-gray-500">Find the perfect plant for your space and experience level.</p>
             </div>
             <div className="p-6">
-              <form
-                onSubmit={handlePlantPreferencesSubmit}
-                className="space-y-8"
-              >
+              <form onSubmit={handlePlantSuggestionSubmit} className="space-y-8">
+                {/* Gardening Experience */}
                 <div>
-                  <label
-                    htmlFor="experienceLevel"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Gardening Experience
-                  </label>
-                  <select
-                    id="experienceLevel"
-                    value={plantPreferences.experienceLevel}
-                    onChange={(e) =>
-                      setPlantPreferences({
-                        ...plantPreferences,
-                        experienceLevel: e.target.value as any,
-                      })
-                    }
-                    className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm"
-                  >
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="expert">Expert</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="text-base font-medium text-gray-900">
-                    Favorite Plant Types
-                  </label>
-                  <p className="text-sm text-gray-500">
-                    Select the types of plants you are most interested in.
-                  </p>
-                  <div className="mt-4 space-y-4">
-                    {plantTypesOptions.map((plant) => (
-                      <div key={plant.id} className="flex items-center">
-                        <input
-                          id={plant.id}
-                          type="checkbox"
-                          checked={plantPreferences.plantTypes.includes(
-                            plant.id
-                          )}
-                          onChange={() => handlePlantTypeChange(plant.id)}
-                          className="h-4 w-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
-                        />
-                        <label
-                          htmlFor={plant.id}
-                          className="ml-3 block text-sm font-medium text-gray-700"
-                        >
-                          {plant.label}
-                        </label>
-                      </div>
-                    ))}
+                  <h3 className="text-base font-semibold text-gray-900">Gardening Experience</h3>
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center gap-x-3">
+                      <input id="beginner" name="experience" type="radio" value="beginner" onChange={e => setSuggestionQuery({...suggestionQuery, experience: e.target.value as PlantSuggestionQuery['experience']})} checked={suggestionQuery.experience === 'beginner'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="beginner" className="block text-sm font-medium leading-6 text-gray-900">Beginner Gardener</label>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                      <input id="intermediate" name="experience" type="radio" value="intermediate" onChange={e => setSuggestionQuery({...suggestionQuery, experience: e.target.value as PlantSuggestionQuery['experience']})} checked={suggestionQuery.experience === 'intermediate'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="intermediate" className="block text-sm font-medium leading-6 text-gray-900">Intermediate Gardener</label>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                      <input id="expert" name="experience" type="radio" value="expert" onChange={e => setSuggestionQuery({...suggestionQuery, experience: e.target.value as PlantSuggestionQuery['experience']})} checked={suggestionQuery.experience === 'expert'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="expert" className="block text-sm font-medium leading-6 text-gray-900">Expert Gardener</label>
+                    </div>
                   </div>
                 </div>
+
+                {/* Lighting Condition */}
                 <div>
-                  <label
-                    htmlFor="lightCondition"
-                    className="block text-sm font-medium text-gray-700"
-                  >
-                    Typical Light Conditions
-                  </label>
-                  <select
-                    id="lightCondition"
-                    value={plantPreferences.lightCondition}
-                    onChange={(e) =>
-                      setPlantPreferences({
-                        ...plantPreferences,
-                        lightCondition: e.target.value as any,
-                      })
-                    }
-                    className="mt-1 block w-full rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm"
-                  >
-                    <option value="low">Low Light</option>
-                    <option value="medium">Medium / Indirect Light</option>
-                    <option value="high">High / Direct Light</option>
-                  </select>
+                  <h3 className="text-base font-semibold text-gray-900">Lighting Condition</h3>
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center gap-x-3">
+                      <input id="low-light" name="light" type="radio" value="low" onChange={e => setSuggestionQuery({...suggestionQuery, light: e.target.value as PlantSuggestionQuery['light']})} checked={suggestionQuery.light === 'low'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="low-light" className="block text-sm font-medium leading-6 text-gray-900">Low Sunlight</label>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                      <input id="medium-light" name="light" type="radio" value="medium" onChange={e => setSuggestionQuery({...suggestionQuery, light: e.target.value as PlantSuggestionQuery['light']})} checked={suggestionQuery.light === 'medium'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="medium-light" className="block text-sm font-medium leading-6 text-gray-900">Medium Sunlight</label>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                      <input id="high-light" name="light" type="radio" value="high" onChange={e => setSuggestionQuery({...suggestionQuery, light: e.target.value as PlantSuggestionQuery['light']})} checked={suggestionQuery.light === 'high'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="high-light" className="block text-sm font-medium leading-6 text-gray-900">High Sunlight</label>
+                    </div>
+                  </div>
                 </div>
 
-                <button
-                  type="submit"
-                  className="flex justify-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
-                >
-                  Update Preferences
+                {/* Plant Type */}
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">Plant Type</h3>
+                  <div className="mt-4 space-y-2">
+                    <div className="flex items-center gap-x-3">
+                      <input id="flower" name="type" type="radio" value="flower" onChange={e => setSuggestionQuery({...suggestionQuery, type: e.target.value as PlantSuggestionQuery['type']})} checked={suggestionQuery.type === 'flower'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="flower" className="block text-sm font-medium leading-6 text-gray-900">Flower</label>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                      <input id="fruit" name="type" type="radio" value="fruit" onChange={e => setSuggestionQuery({...suggestionQuery, type: e.target.value as PlantSuggestionQuery['type']})} checked={suggestionQuery.type === 'fruit'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="fruit" className="block text-sm font-medium leading-6 text-gray-900">Fruit</label>
+                    </div>
+                    <div className="flex items-center gap-x-3">
+                      <input id="herb" name="type" type="radio" value="herb" onChange={e => setSuggestionQuery({...suggestionQuery, type: e.target.value as PlantSuggestionQuery['type']})} checked={suggestionQuery.type === 'herb'} className="h-4 w-4 border-gray-300 text-green-600 focus:ring-green-600"/>
+                      <label htmlFor="herb" className="block text-sm font-medium leading-6 text-gray-900">Herb</label>
+                    </div>
+                  </div>
+                </div>
+
+                <button type="submit" className="inline-flex items-center justify-center gap-2 rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2">
+                    <Leaf size={16} />
+                    Suggest a Plant
                 </button>
               </form>
             </div>
@@ -528,6 +519,7 @@ export default function DashboardView(props: Props) {
         return null;
     }
   };
+
 
   // Main View
   return (
@@ -580,14 +572,14 @@ export default function DashboardView(props: Props) {
               </button>
 
               <button
-                onClick={() => setActiveTab("plant-preferences")}
+                onClick={() => setActiveTab("plant-suggestion")}
                 className={`whitespace-nowrap border-b-2 px-1 py-4 text-sm font-medium ${
-                  activeTab === "plant-preferences"
+                  activeTab === "plant-suggestion"
                     ? "border-green-500 text-green-600"
                     : "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700"
                 }`}
               >
-                Plant Preferences
+                Plant Suggestion
               </button>
             </nav>
           </div>
