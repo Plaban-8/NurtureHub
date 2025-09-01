@@ -1,3 +1,4 @@
+
 "use client";
 
 import { FileText, Book, Video } from 'lucide-react';
@@ -21,7 +22,7 @@ const educationalContent: ContentItem[] = [
     id: 1,
     title: 'The Role of Mycorrhizal Fungi in Plant Growth',
     description: 'A deep dive into the symbiotic relationship between fungi and plant roots.',
-    link: '#',
+    link: 'https://www.nature.com/articles/s41579-019-0243-z',
     type: 'paper',
     author: 'Dr. Jane Doe, Botanist',
   },
@@ -29,7 +30,7 @@ const educationalContent: ContentItem[] = [
     id: 2,
     title: 'Advanced Composting Techniques for Richer Soil',
     description: 'Explore methods to create nutrient-dense compost for your garden.',
-    link: '#',
+    link: 'https://www.epa.gov/recycle/composting-home',
     type: 'paper',
     author: 'Dr. John Smith, Soil Scientist',
   },
@@ -37,7 +38,7 @@ const educationalContent: ContentItem[] = [
     id: 3,
     title: '5 Common Mistakes Beginner Gardeners Make',
     description: 'Learn what to avoid when you\'re just starting your plant journey.',
-    link: '#',
+    link: 'https://www.gardenista.com/posts/10-mistakes-new-gardeners-make/',
     type: 'blog',
     author: 'PlantLife Magazine',
     thumbnail: 'https://placehold.co/600x400.png',
@@ -46,7 +47,7 @@ const educationalContent: ContentItem[] = [
     id: 4,
     title: 'A Guide to Indoor Herb Gardens',
     description: 'Everything you need to know to grow fresh herbs in your kitchen.',
-    link: '#',
+    link: 'https://www.almanac.com/growing-herbs-indoors',
     type: 'blog',
     author: 'Green Thumb Blogs',
     thumbnail: 'https://placehold.co/600x400.png',
@@ -55,7 +56,7 @@ const educationalContent: ContentItem[] = [
     id: 5,
     title: 'How to Properly Prune a Fiddle Leaf Fig',
     description: 'A step-by-step video tutorial on pruning for health and shape.',
-    link: '#',
+    link: 'https://www.youtube.com/watch?v=QA-aPz2a1eI',
     type: 'video',
     thumbnail: 'https://placehold.co/600x400.png',
   },
@@ -63,7 +64,7 @@ const educationalContent: ContentItem[] = [
     id: 6,
     title: 'Hydroponics 101: A Beginner\'s Guide',
     description: 'Learn the basics of growing plants without soil in this engaging video.',
-    link: '#',
+    link: 'https://www.youtube.com/watch?v=T3n_j20-p4g',
     type: 'video',
     thumbnail: 'https://placehold.co/600x400.png',
   },
@@ -86,7 +87,7 @@ export default function EducationalContentPage() {
         </h2>
         <div className="space-y-4">
           {papers.map(paper => (
-            <Link href={paper.link} key={paper.id}>
+            <Link href={paper.link} key={paper.id} target="_blank" rel="noopener noreferrer">
               <div className="block p-6 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow">
                 <h3 className="text-xl font-semibold text-gray-800">{paper.title}</h3>
                 <p className="text-sm text-gray-500 mt-1">by {paper.author}</p>
@@ -104,7 +105,7 @@ export default function EducationalContentPage() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {blogs.map(blog => (
-            <Link href={blog.link} key={blog.id}>
+            <Link href={blog.link} key={blog.id} target="_blank" rel="noopener noreferrer">
                <div className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 {blog.thumbnail && (
                   <div className="relative h-48 w-full">
@@ -129,7 +130,7 @@ export default function EducationalContentPage() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {videos.map(video => (
-            <Link href={video.link} key={video.id}>
+            <Link href={video.link} key={video.id} target="_blank" rel="noopener noreferrer">
               <div className="block bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="relative h-48 w-full">
                    <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
