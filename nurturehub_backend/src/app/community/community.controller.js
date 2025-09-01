@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../auth/auth.middleware.js";
-import { getAllPostsService, postService, likeService } from "./community.service.js";
+import { getAllPostsService, postService, likeService, getSharedPostService, deleteSharedPostService, sharePostService } from "./community.service.js";
 
 export const communityController = Router();
 
@@ -62,5 +62,59 @@ communityController.put('/like', async (req, res)=>{
     res.status(500).json({
       message: "could not like"
     })
+  }
+})
+
+communityController.get('/shared',authenticate, async (req, res)=>{
+  const userId = req.id;
+  try{
+    const response = await getSharedPostService(userId);
+    if (response.success) {
+      res.status(200).json({
+        data: response.data
+      });
+    }else{
+      res.status(400).json({
+        message: "failed in controller"
+      })
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({
+      message: "server error"
+    })
+  }
+})
+
+communityController.delete('/shared/:id', authenticate, async (req, res) => {
+  const id = req.id;
+  const postId = req.params.id;
+  try {
+    await deleteSharedPostService(id,postId);
+    res.status(200).json({
+      message: "Shared post deleted successfully"
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to delete shared post"
+    });
+  }
+});
+
+communityController.post('/share', authenticate, async (req, res) => {
+  const id = req.id;
+  const postId = req.body.postId;
+
+  try {
+    await sharePostService(id, postId);
+    res.status(200).json({
+      message: "Post shared successfully"
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to share post"
+    });
   }
 })

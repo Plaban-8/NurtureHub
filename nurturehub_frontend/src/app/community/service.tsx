@@ -47,3 +47,21 @@ export const like = async (id: any) => {
     throw new Error("failed in frontend service.")
   }
 }
+
+export const sharePost = async (postId: string) => {
+  const token = await getToken();
+  const response = await fetch("http://localhost:4000/community/share", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ postId }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to share post");
+  }
+  revalidatePath('/community');
+  return await response.json();
+};
