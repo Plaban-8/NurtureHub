@@ -4,6 +4,7 @@ import { sendMailSerivce } from "./notification.service.js";
 export const notificationController = Router();
 
 notificationController.post("/sendemail", async (req, res) => {
+    console.log("working sendmail");
     const { to, subject, message } = req.body;
 
     try {
@@ -12,17 +13,5 @@ notificationController.post("/sendemail", async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).json({ success: false, msg: "Failed to send email" });
-    }
-});
-
-notificationController.post("/notify", async (req, res) => {
-    const { plantId } = req.body;
-
-    try {
-        // Logic to send notification
-        res.json({ success: true, msg: "Notification sent!" });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ success: false, msg: "Failed to send notification" });
     }
 });

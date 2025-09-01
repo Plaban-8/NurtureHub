@@ -39,6 +39,7 @@ export const getUserByPlantIdRepo = async (id) => {
   const plant = await Plant.findById(id).populate("userId");
   if (plant) {
     const userid = plant.userId;
+    console.log(userid)
     return await getUser(userid);
   }
   throw new Error("Plant not found");

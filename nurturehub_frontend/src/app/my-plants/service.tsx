@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { getToken } from "../tokenManagement/service";
 import { plantDTO } from "./model";
+import { userDTO } from "../dashboard/model";
 
 export const savePlant = async (data: plantDTO) => {
   const token = await getToken();
@@ -23,7 +24,6 @@ export const savePlant = async (data: plantDTO) => {
 
 export const getPlantsByUserId = async () => {
   const token = await getToken();
-  
 
   const response = await fetch(`http://localhost:4000/myplant`, {
     method: "GET",
@@ -35,9 +35,7 @@ export const getPlantsByUserId = async () => {
     throw new Error("Failed to fetch plants");
   }
   const plants = await response.json();
-  console.log(plants)
   return plants.data as plantDTO[];
-
 };
 
 export const deletePlantById = async (id: string) => {
@@ -69,17 +67,42 @@ export const logWater = async (id: string, name: string) => {
   const result = await response.json();
   return result.data.updatedAt;
 };
+
 export const getUserByPlantId = async (plantId: string) => {
-  const response = await fetch(`http://localhost:4000/myplant/${plantId}/user`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  revalidatePath("/my-plants");
+  const response = await fetch(
+    `http://localhost:4000/myplant/user/${plantId}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+
   if (!response.ok) {
     throw new Error("Failed to fetch user");
   }
   const result = await response.json();
   return result.data;
+};
+
+export const notifyService = async (plantId: string, name: string) => {
+  const user = await getUserByPlantId(plantId);
+  const data = {
+    to: user.email,
+    subject: "Watering Reminder",
+    text: `It's time to water your plant: ${name}`,
+  };
+  const response = await fetch(`http://localhost:4000/notification/sendemail`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+  revalidatePath("/my-plants");
+  if (!response.ok) {
+    throw new Error("Failed to notify user");
+  }
+  return await response.json();
 };

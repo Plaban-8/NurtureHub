@@ -100,10 +100,12 @@ plantProfileController.put('/:id/water', async (req, res) => {
     }
 });
 
-plantProfileController.post('/:Id/user', async (req, res) => {
-    const id = req.params.Id;
+plantProfileController.get('/user/:id', async (req, res) => {
+    console.log("working")
+    const id = req.params.id;
     try {
         const response = await getUserByPlantId(id);
+        console.log(response)
         if (response.success) {
             return res.status(200).json({
                 message: response.message,

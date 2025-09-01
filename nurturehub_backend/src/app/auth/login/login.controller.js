@@ -11,7 +11,6 @@ loginController.post('/', async (req, res) => {
 
   try {
     const result = await loginService(d);
-    console.log(result);
     if (result.success) {
       return res.status(200).json({
         message: result.message,

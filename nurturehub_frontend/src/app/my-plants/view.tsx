@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
 import Image from "next/image";
 import { Leaf, Upload, PlusCircle, Trash2, Droplet } from "lucide-react";
 import { plantDTO } from "./model";
-import { getPlantsByUserId,savePlant,deletePlantById,logWater} from "./service";
+import { savePlant,deletePlantById,logWater,notifyService} from "./service";
 
 interface Props {
   data: {
@@ -65,19 +65,18 @@ export default function MyPlantsView(props: Props) {
     setWaterLogged((prev) => [...prev, readable]);
   };
 
-  function checkWaterLogDifference(plant) {
+  function checkWaterLogDifference(plant: any) {
     if (!plant.waterLogged || plant.waterLogged.length < 2) return;
 
     const logs = plant.waterLogged;
     const lastLog = new Date(logs[logs.length - 1]);
     const prevLog = new Date(logs[logs.length - 2]);
     const diffMs = lastLog.getTime() - prevLog.getTime();
-    const diffDays = diffMs / (1000);
+    const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
     if (diffDays >= 2) {
-      const data = getUserByPlantId(plant._id);
-      console.log(data);
-      notifyService(plant._id); // Call your service here
+       notifyService(plant._id, plant.name);
+       
     }
   }
 
