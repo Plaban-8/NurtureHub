@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
 import Image from "next/image";
 import { Leaf, Upload, PlusCircle, Trash2, Droplet } from "lucide-react";
 import { plantDTO } from "./model";
-import { getPlantsByUserId, savePlant, deletePlantById } from "./service";
+import { getPlantsByUserId,savePlant,deletePlantById,logWater} from "./service";
 
 interface Props {
   data: {
@@ -20,6 +20,7 @@ export default function MyPlantsView(props: Props) {
     photo: null as string | null,
   });
   const [isAddingPlant, setIsAddingPlant] = useState(false);
+  const [waterLogged, setWaterLogged] = useState<string[]>([]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -42,12 +43,12 @@ export default function MyPlantsView(props: Props) {
   };
 
   const deletePlant = async (id: string) => {
-    try{
+    try {
       await deletePlantById(id);
-    }catch(err){
+    } catch (err) {
       console.error("Error deleting plant:", err);
     }
-  }
+  };
 
   const handlePhotoUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files?.[0]) return;
@@ -56,6 +57,33 @@ export default function MyPlantsView(props: Props) {
       setForm((f) => ({ ...f, photo: event.target?.result as string }));
     reader.readAsDataURL(e.target.files[0]);
   };
+
+  const logWatering = async (id: string, name: string) => {
+    const response = await logWater(id, name);
+    const date = new Date(response);
+    const readable = date.toLocaleString();
+    setWaterLogged((prev) => [...prev, readable]);
+  };
+
+  function checkWaterLogDifference(plant) {
+    if (!plant.waterLogged || plant.waterLogged.length < 2) return;
+
+    const logs = plant.waterLogged;
+    const lastLog = new Date(logs[logs.length - 1]);
+    const prevLog = new Date(logs[logs.length - 2]);
+    const diffMs = lastLog.getTime() - prevLog.getTime();
+    const diffDays = diffMs / (1000);
+
+    if (diffDays >= 2) {
+      const data = getUserByPlantId(plant._id);
+      console.log(data);
+      notifyService(plant._id); // Call your service here
+    }
+  }
+
+  useEffect(() => {
+    plants.forEach(checkWaterLogDifference);
+  }, [plants]);
 
   return (
     <div className="bg-gray-50 min-h-screen p-4 md:p-8">
@@ -176,7 +204,10 @@ export default function MyPlantsView(props: Props) {
                 className="object-cover"
               />
 
-              <button onClick={() => deletePlant(plant._id)} className="absolute top-2 right-2 bg-white/70 rounded-full p-2 text-gray-600 hover:text-red-500 transition">
+              <button
+                onClick={() => deletePlant(plant._id)}
+                className="absolute top-2 right-2 bg-white/70 rounded-full p-2 text-gray-600 hover:text-red-500 transition"
+              >
                 <Trash2 size={20} />
               </button>
             </div>
@@ -186,11 +217,23 @@ export default function MyPlantsView(props: Props) {
                   {plant.name}
                 </h3>
                 <p className="text-md text-gray-600">{plant.species}</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  Last watered: (todo)
-                </p>
+                <div>
+                  {plant.waterLogged && plant.waterLogged.length > 0 ? (
+                    <p>
+                      <strong>Last watered: </strong>
+                      {new Date(
+                        plant.waterLogged[plant.waterLogged.length - 1]
+                      ).toLocaleString()}
+                    </p>
+                  ) : (
+                    <p>No water logs yet.</p>
+                  )}
+                </div>
               </div>
-              <button className="mt-4 w-full flex items-center justify-center gap-2 rounded-md border border-green-500/50 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-100">
+              <button
+                onClick={() => logWatering(plant._id, plant.name)}
+                className="mt-4 w-full flex items-center justify-center gap-2 rounded-md border border-green-500/50 bg-green-50 px-4 py-2 text-sm font-medium text-green-700 hover:bg-green-100"
+              >
                 <Droplet size={16} />
                 Log Watering
               </button>

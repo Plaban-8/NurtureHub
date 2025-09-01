@@ -1,6 +1,6 @@
 import { savePlant } from "./plantprofile.repo.js";
 import { getPlant } from "./plantprofile.repo.js";
-import { deletePlant } from "./plantprofile.repo.js";
+import { deletePlant, logWater, getUserByPlantIdRepo } from "./plantprofile.repo.js";
 
 export const plantCreationService = async (data) => {
     try{
@@ -46,6 +46,39 @@ export const deletePlantService = async (id) => {
         return {
         message: "Failed to delete plant profile.",
         success: false,
+        }
+    }
+}
+
+
+export const logWaterService = async (id, name) => {
+    try {
+        const response = await logWater(id, name);
+        return {
+            message: "Watering logged successfully.",
+            data: response,
+            success: true,
+        };
+    } catch (err) {
+        console.log(err);
+        return {
+            message: "Failed to log watering.",
+            success: false,
+        };
+    }
+};
+
+export const getUserByPlantId = async (id) => {
+    try{
+        const response = await getUserByPlantIdRepo(id);
+        return {
+            success: true,
+            data: response,
+        }
+    }catch(err){
+        return{
+            success: false,
+            message: "Failed to fetch user by plant ID",
         }
     }
 }

@@ -35,7 +35,9 @@ export const getPlantsByUserId = async () => {
     throw new Error("Failed to fetch plants");
   }
   const plants = await response.json();
+  console.log(plants)
   return plants.data as plantDTO[];
+
 };
 
 export const deletePlantById = async (id: string) => {
@@ -50,4 +52,34 @@ export const deletePlantById = async (id: string) => {
   if (!response.ok) {
     throw new Error("Failed to delete plant");
   }
+};
+
+export const logWater = async (id: string, name: string) => {
+  const response = await fetch(`http://localhost:4000/myplant/${id}/water`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ name }),
+  });
+  revalidatePath("/my-plants");
+  if (!response.ok) {
+    throw new Error("Failed to log watering");
+  }
+  const result = await response.json();
+  return result.data.updatedAt;
+};
+export const getUserByPlantId = async (plantId: string) => {
+  const response = await fetch(`http://localhost:4000/myplant/${plantId}/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  revalidatePath("/my-plants");
+  if (!response.ok) {
+    throw new Error("Failed to fetch user");
+  }
+  const result = await response.json();
+  return result.data;
 };

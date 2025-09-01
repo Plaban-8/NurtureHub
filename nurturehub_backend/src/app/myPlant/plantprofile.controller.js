@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getPlantService, plantCreationService } from "./plantprofile.service.js";
 import { authenticate } from "../auth/auth.middleware.js";
-import  { deletePlantService } from "./plantprofile.service.js";
+import  { deletePlantService, logWaterService, getUserByPlantId } from "./plantprofile.service.js";
 export const plantProfileController = Router();
 
 plantProfileController.post('/',authenticate, async (req , res) => {
@@ -75,4 +75,49 @@ plantProfileController.delete('/', async (req, res) => {
         });
     }
 
+});
+
+plantProfileController.put('/:id/water', async (req, res) => {
+    const id = req.params.id;
+    const name = req.body.name;
+    try {
+        const response = await logWaterService(id, name);
+        if (response.success) {
+            return res.status(200).json({
+                message: response.message,
+                data: response.data,
+                status: 200
+            });
+        }
+        return res.status(403).json({
+            message: response.message,
+            status: 403
+        });
+    } catch (err) {
+        return res.json({
+            message: err.message,
+        });
+    }
+});
+
+plantProfileController.post('/:Id/user', async (req, res) => {
+    const id = req.params.Id;
+    try {
+        const response = await getUserByPlantId(id);
+        if (response.success) {
+            return res.status(200).json({
+                message: response.message,
+                data: response.data,
+                status: 200
+            });
+        }
+        return res.status(403).json({
+            message: response.message,
+            status: 403
+        });
+    } catch (err) {
+        return res.json({
+            message: err.message,
+        });
+    }
 });

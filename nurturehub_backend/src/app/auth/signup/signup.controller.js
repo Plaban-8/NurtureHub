@@ -4,6 +4,7 @@ import { signupService } from "./signup.service.js";
 export const signupController = Router();
 
 signupController.post("/", async (req, res) => {
+  console.log("working")
   const d = {
     name: req.body.name,
     email: req.body.email,
@@ -11,12 +12,16 @@ signupController.post("/", async (req, res) => {
     password: req.body.password,
   };
 
-  if (await signupService(d)) {
-    return res.status(201).json({
-      message: "Signed up Succesfully",
-      result: true,
-      status: 201,
-    });
+  try {
+    await signupService(d) 
+      return res.status(201).json({
+        message: "Signed up Succesfully",
+        result: true,
+        status: 201,
+  });
+    }
+ catch (error) {
+    console.error("Error during signup:", error);
   }
   return res.status(403).json({
     message: "Signed up failed",

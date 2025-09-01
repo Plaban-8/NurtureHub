@@ -10,8 +10,9 @@ export const signUpService = async (data: RegisterDTO) => {
     },
     body: JSON.stringify(data),
   });
+  const responseData = await response.json();
+  console.log(responseData);
   if (!response.ok) {
-    alert("Registration failed. Please try again.");
     throw new Error("Registration failed");
   }
 };
