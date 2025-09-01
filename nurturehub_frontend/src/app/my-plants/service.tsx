@@ -91,7 +91,7 @@ export const notifyService = async (plantId: string, name: string) => {
   const data = {
     to: user.email,
     subject: "Watering Reminder",
-    text: `It's time to water your plant: ${name}`,
+    message: `It's time to water your plant: ${name}`,
   };
   const response = await fetch(`http://localhost:4000/notification/sendemail`, {
     method: "POST",
@@ -100,7 +100,6 @@ export const notifyService = async (plantId: string, name: string) => {
     },
     body: JSON.stringify(data),
   });
-  revalidatePath("/my-plants");
   if (!response.ok) {
     throw new Error("Failed to notify user");
   }

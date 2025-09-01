@@ -4,7 +4,6 @@ import { signupService } from "./signup.service.js";
 export const signupController = Router();
 
 signupController.post("/", async (req, res) => {
-  console.log("working")
   const d = {
     name: req.body.name,
     email: req.body.email,

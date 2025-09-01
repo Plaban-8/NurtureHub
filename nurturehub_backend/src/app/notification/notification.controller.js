@@ -4,7 +4,6 @@ import { sendMailSerivce } from "./notification.service.js";
 export const notificationController = Router();
 
 notificationController.post("/sendemail", async (req, res) => {
-    console.log("working sendmail");
     const { to, subject, message } = req.body;
 
     try {

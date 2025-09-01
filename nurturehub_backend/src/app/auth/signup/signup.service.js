@@ -14,7 +14,6 @@ export const signupService = async (data) => {
     email: data.email,
     password: pass,
   };
-  console.log(d);
   try {
     await saveUser(d);
     return true;

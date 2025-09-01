@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, FormEvent, ChangeEvent } from "react";
 import Image from "next/image";
 import { Leaf, Upload, PlusCircle, Trash2, Droplet } from "lucide-react";
 import { plantDTO } from "./model";
-import { savePlant,deletePlantById,logWater,notifyService} from "./service";
+import { savePlant, deletePlantById, logWater, notifyService } from "./service";
 
 interface Props {
   data: {
@@ -75,8 +75,7 @@ export default function MyPlantsView(props: Props) {
     const diffDays = diffMs / (1000 * 60 * 60 * 24);
 
     if (diffDays >= 2) {
-       notifyService(plant._id, plant.name);
-       
+      notifyService(plant._id, plant.name);
     }
   }
 
