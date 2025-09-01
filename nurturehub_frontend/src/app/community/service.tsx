@@ -83,3 +83,15 @@ export const addComment = async (postId: string, text: string) => {
   revalidatePath('/community');
   return await response.json();
 };
+
+export const dislike = async (id: string) => {
+  const response = await fetch("http://localhost:4000/community/dislike", {
+    method: "PUT",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({"id": id}),
+  })
+  revalidatePath('/community');
+  if(!response.ok){
+    throw new Error("failed in frontend service.")
+  }
+}

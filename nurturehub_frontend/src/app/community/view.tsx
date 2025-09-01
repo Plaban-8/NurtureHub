@@ -10,7 +10,7 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { Post, newPost } from "./model";
-import { addComment, createPost, like, sharePost } from "./service";
+import { addComment, createPost, dislike, like, sharePost } from "./service";
 import { add, formatDistanceToNow } from "date-fns";
 
 interface Props {
@@ -93,17 +93,10 @@ export default function CommunityView({ data }: Props) {
   const handleLike = async (postId: string) => {
     const alreadyLiked = likedPosts.has(postId);
 
-    setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post._id === postId
-          ? { ...post, likes: alreadyLiked ? post.likes - 1 : post.likes + 1 }
-          : post
-      )
-    );
-
     setLikedPosts((prev) => {
       const updated = new Set(prev);
       if (alreadyLiked) {
+        dislike(postId);
         updated.delete(postId);
       } else {
         updated.add(postId);

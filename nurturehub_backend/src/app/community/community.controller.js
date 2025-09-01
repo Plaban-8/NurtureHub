@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../auth/auth.middleware.js";
-import { getAllPostsService, postService, likeService, getSharedPostService,addCommentService, deleteSharedPostService, sharePostService } from "./community.service.js";
+import { getAllPostsService, postService, likeService, getSharedPostService,addCommentService, deleteSharedPostService, sharePostService, dislikeService } from "./community.service.js";
 
 export const communityController = Router();
 
@@ -133,6 +133,20 @@ communityController.post('/:postId/comments', authenticate, async (req, res) => 
     console.log(err);
     res.status(500).json({
       message: "Failed to add comment"
+    });
+  }
+});
+
+communityController.put('/dislike', async (req, res) => {
+  const id = req.body.id;
+  try {
+    await dislikeService(id);
+    res.status(200).json({
+      message: "disliked"
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "could not dislike"
     });
   }
 });

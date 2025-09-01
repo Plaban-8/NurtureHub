@@ -39,3 +39,7 @@ export const addComment = async (userId, postId, text) => {
     { $push: { comments: { userId, text } } }
   );
 };
+
+export const dislike = async (id) => {
+  return await Community.updateOne({_id:id}, {$inc: {likes:-1}});
+}

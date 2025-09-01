@@ -1,5 +1,5 @@
 
-import { savePost, getAllPosts, like, getSharedPosts, deleteSharedPost, sharePost, addComment } from "./community.repo.js";
+import { savePost, getAllPosts, like, getSharedPosts, deleteSharedPost, sharePost, addComment, dislike } from "./community.repo.js";
 
 export const postService = async (data) => {
   
@@ -75,6 +75,14 @@ export const sharePostService = async (userId, postId) => {
 export const addCommentService = async (userId, postId, text) => {
   try {
     await addComment(userId, postId, text);
+  } catch (err) {
+    throw new Error("failed in backend service");
+  }
+};
+
+export const dislikeService = async (id) => {
+  try {
+    await dislike(id);
   } catch (err) {
     throw new Error("failed in backend service");
   }
