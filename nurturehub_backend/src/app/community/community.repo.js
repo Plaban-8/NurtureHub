@@ -14,3 +14,7 @@ export const getAllPosts = async () => {
   return posts;
 
 }
+
+export const like = async (id) =>{
+  return await Community.updateOne({_id:id}, {$inc: {likes:1}})
+}

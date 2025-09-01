@@ -31,7 +31,6 @@ export const updateUser = async (data: userDTO) => {
     },
     body: JSON.stringify(data),
   });
-  console.log(response);
   if (!response.ok) {
     throw new Error("Failed to update user");
   }

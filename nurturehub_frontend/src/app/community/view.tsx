@@ -4,7 +4,7 @@ import { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import Image from "next/image";
 import { Heart, MessageCircle, Share2, Send, Image as ImageIcon } from "lucide-react";
 import { Post, newPost } from "./model";
-import { createPost } from "./service";
+import { createPost, like } from "./service";
 import { formatDistanceToNow } from "date-fns";
 
 interface Props {
@@ -18,9 +18,12 @@ export default function CommunityView({ data }: Props) {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [activeCommentSection, setActiveCommentSection] = useState<string | null>(null);
   const [commentContent, setCommentContent] = useState("");
+  const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+
 
   useEffect(() => {
     setPosts(data.posts);
+    
   }, [data.posts]);
 
   const fileToBase64 = (file: File): Promise<string> => {
@@ -90,11 +93,35 @@ export default function CommunityView({ data }: Props) {
     setCommentContent("");
   };
 
-  const handleLike = (postId: string) => {
-    setPosts(posts.map((post) =>
-      post._id === postId ? { ...post, likes: post.likes + 1 } : post
-    ));
-  };
+const handleLike = async (postId: string) => {
+  const alreadyLiked = likedPosts.has(postId);
+
+  setPosts((prevPosts) =>
+    prevPosts.map((post) =>
+      post._id === postId
+        ? { ...post, likes: alreadyLiked ? post.likes - 1 : post.likes + 1 }
+        : post
+    )
+  );
+
+  setLikedPosts((prev) => {
+    const updated = new Set(prev);
+    if (alreadyLiked) {
+      updated.delete(postId);
+    } else {
+      updated.add(postId);
+    }
+    return updated;
+  });
+
+  try {
+    await like(postId); // still call backend
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+
 
   const handleShare = (postId: string) => {
     setPosts(posts.map((post) =>
@@ -167,15 +194,20 @@ export default function CommunityView({ data }: Props) {
                     <p className="text-gray-700 mt-2">{post.content}</p>
                     {post.photo && (
                       <div className="mt-4 rounded-lg overflow-hidden border">
-                        <Image src={post.photo} alt="Post image" width={800} height={600} className="w-full object-cover" />
+                        <img src={post.photo} alt="Post image" width={800} height={600} className="w-full object-cover" />
                       </div>
                     )}
 
                     <div className="flex justify-between items-center mt-4 text-gray-500">
-                      <button onClick={() => handleLike(post._id)} className="flex items-center gap-2 hover:text-red-500">
-                        <Heart size={20} />
-                        <span>{post.likes}</span>
-                      </button>
+                      <button
+  onClick={() => handleLike(post._id)}
+  className={`flex items-center gap-2 ${likedPosts.has(post._id) ? "text-red-500" : "hover:text-red-500"}`}
+>
+  <Heart size={20} fill={likedPosts.has(post._id) ? "red" : "none"} />
+  <span>{post.likes}</span>
+</button>
+
+
                       <button onClick={() => toggleCommentSection(post._id)} className="flex items-center gap-2 hover:text-blue-500">
                         <MessageCircle size={20} />
                         <span>{}</span>

@@ -25,7 +25,7 @@ export const getAllPosts = async () => {
   const response = await fetch("http://localhost:4000/community", {
     method: "GET",
     headers: {
-      "ConetentType": "application/json"
+      "Content-Type": "application/json"
     },
   })
   if(!response.ok){
@@ -33,4 +33,17 @@ export const getAllPosts = async () => {
   }
   const result = await response.json();
   return result.data;
+}
+
+export const like = async (id: any) => {
+  console.log(JSON.stringify(id))
+  const response = await fetch("http://localhost:4000/community/like", {
+    method: "PUT",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify({"id": id}),
+  })
+  revalidatePath('/community');
+  if(!response.ok){
+    throw new Error("failed in frontend service.")
+  }
 }

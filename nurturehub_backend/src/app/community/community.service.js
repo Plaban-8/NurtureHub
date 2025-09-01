@@ -1,5 +1,5 @@
 
-import { savePost, getAllPosts } from "./community.repo.js";
+import { savePost, getAllPosts, like } from "./community.repo.js";
 
 export const postService = async (data) => {
   
@@ -32,3 +32,11 @@ export const getAllPostsService = async () => {
     }
   }
 };
+
+export const likeService = async (id) =>{
+  try{
+    await like(id);
+  }catch(err){
+    throw new Error("failed in backend service")
+  }
+}

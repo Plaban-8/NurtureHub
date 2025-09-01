@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../auth/auth.middleware.js";
-import { getAllPostsService, postService } from "./community.service.js";
+import { getAllPostsService, postService, likeService } from "./community.service.js";
 
 export const communityController = Router();
 
@@ -24,6 +24,7 @@ communityController.post("/", authenticate, async (req, res) => {
       });
     }
   } catch (error) {
+    console.log(err)
     res.status(500).json({
       message: "Internal server error",
     });
@@ -33,7 +34,6 @@ communityController.post("/", authenticate, async (req, res) => {
 communityController.get("/", async (req, res) => {
   try {
     const response = await getAllPostsService();
-    console.log(response.data)
     if (response.success) {
       res.status(200).json({
         data: response.data,
@@ -50,3 +50,17 @@ communityController.get("/", async (req, res) => {
     })
   }
 });
+
+communityController.put('/like', async (req, res)=>{
+  const id = req.body.id
+  try{
+    await likeService(id);
+    res.status(200).json({
+      message: "liked"
+    })
+  }catch(err){
+    res.status(500).json({
+      message: "could not like"
+    })
+  }
+})
