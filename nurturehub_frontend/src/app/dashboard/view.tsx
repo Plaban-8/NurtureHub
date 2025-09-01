@@ -4,7 +4,12 @@ import { useState, FormEvent, useEffect } from "react";
 import { Mail, Phone, Trash2 } from "lucide-react";
 import Image from "next/image";
 import { PasswordFormState, userDTO } from "./model";
-import { changePassword, updateUser, getSharedPosts, deleteSharedPost } from "./service";
+import {
+  changePassword,
+  updateUser,
+  getSharedPosts,
+  deleteSharedPost,
+} from "./service";
 import { set } from "date-fns";
 import { Leaf } from "lucide-react";
 import { Post } from "../community/model";
@@ -113,7 +118,6 @@ export default function DashboardView(props: Props) {
       try {
         const result: Post[] = await getSharedPosts();
         result.reverse();
-        console.log(result);
         setSharedPosts(result);
       } catch (err) {
         console.log("Failed to fetch shared posts:", err);
@@ -121,8 +125,6 @@ export default function DashboardView(props: Props) {
     };
     fetchSharedPosts();
   }, []);
-
-  // State for forms
 
   const [password, setPassword] = useState<PasswordFormState>({});
 

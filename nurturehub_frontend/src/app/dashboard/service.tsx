@@ -72,7 +72,6 @@ export const getSharedPosts = async () => {
   }
 
   const result = await response.json();
-  console.log(result);
   return result.data as Post[];
 };
 

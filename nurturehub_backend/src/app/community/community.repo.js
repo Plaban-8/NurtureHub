@@ -32,3 +32,10 @@ export const deleteSharedPost = async (id, postId) => {
 export const sharePost = async (userId, postId) => {
   return await Shared.create({ userId, postId });
 };
+
+export const addComment = async (userId, postId, text) => {
+  return await Community.updateOne(
+    { _id: postId },
+    { $push: { comments: { userId, text } } }
+  );
+};

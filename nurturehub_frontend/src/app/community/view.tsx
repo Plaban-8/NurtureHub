@@ -10,8 +10,8 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { Post, newPost } from "./model";
-import { createPost, like, sharePost } from "./service";
-import { formatDistanceToNow } from "date-fns";
+import { addComment, createPost, like, sharePost } from "./service";
+import { add, formatDistanceToNow } from "date-fns";
 
 interface Props {
   data: { posts: Post[] };
@@ -84,23 +84,9 @@ export default function CommunityView({ data }: Props) {
     setActiveCommentSection(activeCommentSection === postId ? null : postId);
   };
 
-  const handleCommentSubmit = (postId: string) => {
+  const handleCommentSubmit = async (postId: string) => {
     if (!commentContent.trim()) return;
-
-    const newComment = {
-      text: commentContent,
-      createdAt: new Date().toISOString(),
-      user: { name: "User Name", avatar: "/avatar.png" },
-    };
-
-    setPosts(
-      posts.map((post) =>
-        post._id === postId
-          ? { ...post, comments: [...post.comments, newComment] }
-          : post
-      )
-    );
-
+    await addComment(postId, commentContent);
     setCommentContent("");
   };
 
@@ -275,30 +261,36 @@ export default function CommunityView({ data }: Props) {
                     {activeCommentSection === post._id && (
                       <div className="mt-4 pt-4 border-t border-gray-200">
                         <div className="space-y-3 mb-4">
-                          {post.comments.map((comment, idx) => (
-                            <div
-                              key={idx}
-                              className="text-sm bg-gray-100 p-3 rounded-lg"
-                            >
-                              <p>
-                                <span className="font-semibold">
-                                  {comment.user.name}
-                                </span>
-                                : {comment.text}
-                              </p>
-                              <p
-                                className="text-xs text-gray-500 mt-1"
-                                title={new Date(
-                                  comment.createdAt
-                                ).toLocaleString()}
+                          {post.comments && post.comments.length > 0 ? (
+                            post.comments.map((comment, idx) => (
+                              <div
+                                key={idx}
+                                className="text-sm bg-gray-100 p-3 rounded-lg"
                               >
-                                {formatDistanceToNow(
-                                  new Date(comment.createdAt),
-                                  { addSuffix: true }
-                                )}
-                              </p>
-                            </div>
-                          ))}
+                                <p>
+                                  <span className="font-semibold">
+                                    {comment.userId.name}
+                                  </span>
+                                  : {comment.text}
+                                </p>
+                                <p
+                                  className="text-xs text-gray-500 mt-1"
+                                  title={new Date(
+                                    comment.createdAt
+                                  ).toLocaleString()}
+                                >
+                                  {formatDistanceToNow(
+                                    new Date(comment.createdAt),
+                                    { addSuffix: true }
+                                  )}
+                                </p>
+                              </div>
+                            ))
+                          ) : (
+                            <p className="text-gray-400 text-sm">
+                              No comments yet
+                            </p>
+                          )}
                         </div>
                         <div className="flex items-center gap-2">
                           <textarea

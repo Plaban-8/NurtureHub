@@ -11,7 +11,7 @@ export interface Post {
   comments: {
     text: string;
     createdAt: string;
-    user: {
+    userId: {
       name: string;
       avatar: string;
     };

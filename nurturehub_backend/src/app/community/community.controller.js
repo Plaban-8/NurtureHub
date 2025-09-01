@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { authenticate } from "../auth/auth.middleware.js";
-import { getAllPostsService, postService, likeService, getSharedPostService, deleteSharedPostService, sharePostService } from "./community.service.js";
+import { getAllPostsService, postService, likeService, getSharedPostService,addCommentService, deleteSharedPostService, sharePostService } from "./community.service.js";
 
 export const communityController = Router();
 
@@ -118,3 +118,21 @@ communityController.post('/share', authenticate, async (req, res) => {
     });
   }
 })
+
+communityController.post('/:postId/comments', authenticate, async (req, res) => {
+  const userId = req.id;
+  const postId = req.params.postId;
+  const text = req.body.text;
+
+  try {
+    await addCommentService(userId, postId, text);
+    res.status(200).json({
+      message: "Comment added successfully"
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      message: "Failed to add comment"
+    });
+  }
+});

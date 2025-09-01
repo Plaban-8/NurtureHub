@@ -65,3 +65,21 @@ export const sharePost = async (postId: string) => {
   revalidatePath('/community');
   return await response.json();
 };
+
+export const addComment = async (postId: string, text: string) => {
+  const token = await getToken();
+  const response = await fetch(`http://localhost:4000/community/${postId}/comments`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({ text }),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to add comment");
+  }
+  revalidatePath('/community');
+  return await response.json();
+};
