@@ -1,0 +1,280 @@
+"use client";
+
+import { useState, useRef, ChangeEvent, FormEvent, useEffect } from "react";
+import Image from "next/image";
+import { PlusCircle, Upload, X, Trash2 } from "lucide-react";
+import { marketDTO, newMarket } from "./model";
+import { postMarket, getMarketPosts } from "./service";
+
+// Models
+
+// Data (simulating a database fetch)
+interface Props {
+    data: {
+        posts: marketDTO[];
+    }
+}
+// Main Component
+export default function MarketplaceView(props: Props) {
+  const [listings, setListings] = useState<newMarket[]>([]);
+  const [posts, setPosts] = useState<marketDTO[]>(props.data.posts);
+  const [isCreating, setIsCreating] = useState(false);
+  const [selectedListing, setSelectedListing] = useState<marketDTO | null>(null);
+  // Form state
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [price, setPrice] = useState("");
+  const [photo, setPhoto] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handlePhotoUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setPhoto(event.target?.result as string);
+      };
+      reader.readAsDataURL(e.target.files[0]);
+    }
+  };
+
+  const triggerPhotoUpload = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (!title || !description) {
+      alert("Please fill out the title and description.");
+      return;
+    }
+
+    const newListing: newMarket = {
+      title,
+      description,
+      price: price || "Free",
+      photo: photo ? photo : "https://placehold.co/600x400.png",
+    };
+
+    try{
+        await postMarket(newListing);
+        window.location.reload();
+    }catch(err){
+        console.log(err)
+    }
+    setListings((prevListings) => [newListing, ...prevListings]);
+
+    // Reset form
+    setTitle("");
+    setDescription("");
+    setPrice("");
+    setPhoto(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setIsCreating(false);
+  };
+
+  const handleContactClick = (listing: marketDTO) => {
+    setSelectedListing(listing);
+  };
+
+  const closeModal = () => {
+    setSelectedListing(null);
+  };
+
+  return (
+    <div className="bg-gray-50 min-h-screen p-4 md:p-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold text-gray-800">Marketplace</h1>
+        <button
+          onClick={() => setIsCreating(!isCreating)}
+          className="flex items-center justify-center gap-2 rounded-full bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+        >
+          <PlusCircle size={20} />
+          {isCreating ? "Cancel" : "Create Listing"}
+        </button>
+      </div>
+
+      {isCreating && (
+        <div className="mb-8 p-6 bg-white rounded-lg shadow-md">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">
+            Create New Listing
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Title
+              </label>
+              <input
+                type="text"
+                id="title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Description
+              </label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                rows={4}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+              ></textarea>
+            </div>
+            <div>
+              <label
+                htmlFor="price"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Price
+              </label>
+              <input
+                type="text"
+                id="price"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="Leave blank for 'Free'"
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Photo
+              </label>
+              <div
+                onClick={triggerPhotoUpload}
+                className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10 cursor-pointer hover:border-green-500"
+              >
+                <div className="text-center">
+                  {photo ? (
+                    <Image
+                      src={photo}
+                      alt="Preview"
+                      width={200}
+                      height={200}
+                      className="mx-auto h-32 w-32 object-cover rounded-lg"
+                    />
+                  ) : (
+                    <>
+                      <Upload className="mx-auto h-12 w-12 text-gray-400" />
+                      <p className="mt-4 text-sm text-gray-600">
+                        Click to upload a photo
+                      </p>
+                    </>
+                  )}
+                </div>
+              </div>
+              <input
+                ref={fileInputRef}
+                type="file"
+                onChange={handlePhotoUpload}
+                accept="image/*"
+                className="hidden"
+              />
+            </div>
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                className="flex items-center justify-center gap-2 rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700"
+              >
+                Create Listing
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {posts.map((listing, idx) => (
+          <div
+            key={idx}
+            className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
+          >
+            <div className="relative h-56 w-full">
+              <Image
+                src={listing.photo}
+                alt={listing.title}
+                layout="fill"
+                objectFit="cover"
+                data-ai-hint="plant sale"
+              />
+            </div>
+            <div className="p-6 flex-grow flex flex-col">
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="text-xl font-bold text-gray-800 pr-2 flex-1">
+                  {listing.title}
+                </h2>
+              </div>
+              <p className="text-sm text-gray-500 mt-1">
+                Listed by {listing.user}
+              </p>
+              <p className="text-gray-700 mt-2 flex-grow">
+                {listing.description}
+              </p>
+              <div className="flex justify-between items-center mt-4">
+                <p className="text-lg font-semibold text-primary">
+                  {listing.price || "Free"}
+                </p>
+                <button
+                  onClick={() => handleContactClick(listing)}
+                  className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-primary/90"
+                >
+                  Contact
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {selectedListing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-gray-800">
+                Contact {selectedListing.user}
+              </h2>
+              <button
+                onClick={closeModal}
+                className="text-gray-500 hover:text-gray-800"
+              >
+                <X size={24} />
+              </button>
+            </div>
+            <div>
+              <p className="text-gray-700">
+                You can contact the seller using the details below:
+              </p>
+              <div className="mt-4 space-y-2">
+                <p>
+                  <strong>Email:</strong> {selectedListing.email}
+                </p>
+                <p>
+                  <strong>Phone:</strong> {selectedListing.phone}
+                </p>
+              </div>
+            </div>
+            <div className="mt-6 text-right">
+              <button
+                onClick={closeModal}
+                className="rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-800 shadow-sm hover:bg-gray-300"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
