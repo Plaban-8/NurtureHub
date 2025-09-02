@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { Camera, Users, ShoppingCart, Lightbulb, Leaf } from 'lucide-react';
 import { Navbar } from '@/components/navbar';
+//Deploy Trigger
 
 export default function HomePage() {
   return (
