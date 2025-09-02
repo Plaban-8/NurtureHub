@@ -114,6 +114,7 @@ export default function CommunityView({ data }: Props) {
   const handleShare = async (postId: string) => {
     try {
       await sharePost(postId);
+      alert("Post shared successfully!");
     } catch (err) {
       console.log(err);
     }
