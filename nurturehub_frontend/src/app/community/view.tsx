@@ -92,7 +92,11 @@ export default function CommunityView({ data }: Props) {
 
   const handleLike = async (postId: string) => {
     const alreadyLiked = likedPosts.has(postId);
-
+    try {
+      await like(postId);
+    } catch (err) {
+      console.error(err);
+    }
     setLikedPosts((prev) => {
       const updated = new Set(prev);
       if (alreadyLiked) {
@@ -104,11 +108,7 @@ export default function CommunityView({ data }: Props) {
       return updated;
     });
 
-    try {
-      await like(postId); // still call backend
-    } catch (err) {
-      console.error(err);
-    }
+    
   };
 
   const handleShare = async (postId: string) => {

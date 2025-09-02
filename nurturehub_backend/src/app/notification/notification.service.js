@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 export const sendMailSerivce = async (to, subject, text, html) => {
     try {
         let info = await transporter.sendMail({
-            from: `"My App" <${process.env.EMAIL_USER}>`,
+            from: `"NurtureHub " <${process.env.EMAIL_USER}>`,
             to,
             subject,
             text,
