@@ -1,3 +1,5 @@
+
+export const dynamic = "force-dynamic";
 import CommunityView from "./view"
 import {getAllPosts} from "./service"
 import { Post } from "./model";

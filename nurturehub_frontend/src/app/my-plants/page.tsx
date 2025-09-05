@@ -1,4 +1,6 @@
 
+export const dynamic = "force-dynamic";
+
 import { getPlantsByUserId } from "./service";
 import MyPlantsView from "./view";
 

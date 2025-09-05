@@ -1,3 +1,5 @@
+
+export const dynamic = "force-dynamic";
 import DashboardView from "./view";
 import { getUserData } from "./service";
 import { userDTO } from "./model";

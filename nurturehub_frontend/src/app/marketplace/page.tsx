@@ -1,3 +1,5 @@
+
+export const dynamic = "force-dynamic";
 import MarketplaceView from "./view";
 import { getMarketPosts } from "./service";
 export default async function MarketplacePage() {
