@@ -4,6 +4,8 @@ import Link from 'next/link';
 import { Leaf } from 'lucide-react';
 import { logout } from '@/app/login/service';
 
+import { useState } from 'react';
+
 
 export function Navbar() {
     const doLogout = async () => {
@@ -12,6 +14,7 @@ export function Navbar() {
     }
 
     const navLinkClasses = "transition-colors text-gray-600 hover:text-gray-900 font-semibold";
+    const [menuOpen, setMenuOpen] = useState(false);
     return (
         <header className="sticky top-0 z-50 w-full border-b bg-white">
             <div className="container flex h-20 items-center">
@@ -63,14 +66,39 @@ export function Navbar() {
                         Community
                     </Link>
                 </nav>
-                <div className="flex flex-1 items-center justify-end space-x-2 pr-4">
-                    <a href="/dashboard" className={`${navLinkClasses} inline-flex h-10 items-center justify-center`}>
-                        Profile
-                    </a>
-                    <a onClick={doLogout} className={`${navLinkClasses} inline-flex h-10 items-center justify-center cursor-pointer`}>
-                        Sign Out
-                    </a>
+                <button
+                    className="md:hidden flex items-center"
+                    onClick={() => setMenuOpen(!menuOpen)}
+                    aria-label="Toggle menu"
+                >
+                    <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+                        />
+                    </svg>
+                </button>
+            </div>
+            {menuOpen && (
+                <div className="md:hidden px-4 pb-4 space-y-2">
+                    <Link href="/plant-disease-detection" className="block">Plant Disease Detection</Link>
+                    <Link href="/my-plants" className="block">My Plants</Link>
+                    <Link href="/store" className="block">Store</Link>
+                    <Link href="/marketplace" className="block">Marketplace</Link>
+                    <Link href="/expert-solution" className="block">Expert Solution</Link>
+                    <Link href="/educational-content" className="block">Educational Content</Link>
+                    <Link href="/community" className="block">Community</Link>
                 </div>
+            )}
+            <div className="flex flex-1 items-center justify-end space-x-2 pr-4">
+                <a href="/dashboard" className={`${navLinkClasses} inline-flex h-10 items-center justify-center`}>
+                    Profile
+                </a>
+                <a onClick={doLogout} className={`${navLinkClasses} inline-flex h-10 items-center justify-center cursor-pointer`}>
+                    Sign Out
+                </a>
             </div>
         </header>
     );
