@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getToken } from "../tokenManagement/service";
 import { plantDTO } from "./model";
 import { userDTO } from "../dashboard/model";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
 
 export const savePlant = async (data: plantDTO) => {
   const token = await getToken();

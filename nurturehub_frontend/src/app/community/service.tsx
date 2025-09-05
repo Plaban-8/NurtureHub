@@ -1,11 +1,15 @@
 "use server"
+
 import { getToken } from "../tokenManagement/service";
 import { newPost } from "./model";
 import { revalidatePath } from "next/cache";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+
+
 export const createPost = async (data: newPost) => {
   const token = await getToken();
-  const response = await fetch("http://localhost:4000/community", {
+  const response = await fetch(`${BACKEND_URL}/community`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -21,8 +25,9 @@ export const createPost = async (data: newPost) => {
   return await response.json(); // will now return the created post
 };
 
+
 export const getAllPosts = async () => {
-  const response = await fetch("http://localhost:4000/community", {
+  const response = await fetch(`${BACKEND_URL}/community`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json"
@@ -35,9 +40,10 @@ export const getAllPosts = async () => {
   return result.data;
 }
 
+
 export const like = async (id: any) => {
   console.log(JSON.stringify(id))
-  const response = await fetch("http://localhost:4000/community/like", {
+  const response = await fetch(`${BACKEND_URL}/community/like`, {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({"id": id}),
@@ -48,9 +54,10 @@ export const like = async (id: any) => {
   }
 }
 
+
 export const sharePost = async (postId: string) => {
   const token = await getToken();
-  const response = await fetch("http://localhost:4000/community/share", {
+  const response = await fetch(`${BACKEND_URL}/community/share`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -66,9 +73,10 @@ export const sharePost = async (postId: string) => {
   return await response.json();
 };
 
+
 export const addComment = async (postId: string, text: string) => {
   const token = await getToken();
-  const response = await fetch(`http://localhost:4000/community/${postId}/comments`, {
+  const response = await fetch(`${BACKEND_URL}/community/${postId}/comments`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -84,8 +92,9 @@ export const addComment = async (postId: string, text: string) => {
   return await response.json();
 };
 
+
 export const dislike = async (id: string) => {
-  const response = await fetch("http://localhost:4000/community/dislike", {
+  const response = await fetch(`${BACKEND_URL}/community/dislike`, {
     method: "PUT",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({"id": id}),

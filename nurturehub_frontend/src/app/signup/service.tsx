@@ -2,8 +2,10 @@
 
 import { RegisterDTO } from "./model";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+
 export const signUpService = async (data: RegisterDTO) => {
-  const response = await fetch("http://localhost:4000/auth/signup", {
+  const response = await fetch(`${BACKEND_URL}/auth/signup`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

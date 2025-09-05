@@ -1,12 +1,13 @@
 "use server";
-
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
 import { getToken } from "../tokenManagement/service";
 import { PasswordFormState, userDTO } from "./model";
 import { Post } from "../community/model";
 
+
 export const getUserData = async () => {
   const token = await getToken();
-  const response = await fetch("http://localhost:4000/profile", {
+  const response = await fetch(`${BACKEND_URL}/profile`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -22,9 +23,10 @@ export const getUserData = async () => {
   return result.data as userDTO;
 };
 
+
 export const updateUser = async (data: userDTO) => {
   const token = await getToken();
-  const response = await fetch("http://localhost:4000/profile/update", {
+  const response = await fetch(`${BACKEND_URL}/profile/update`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -37,13 +39,14 @@ export const updateUser = async (data: userDTO) => {
   }
 };
 
+
 export const changePassword = async (data: PasswordFormState) => {
   if (data.newPassword !== data.confirmPassword) {
     throw new Error("New password and confirm password do not match");
   }
 
   const token = await getToken();
-  const response = await fetch("http://localhost:4000/profile/changePassword", {
+  const response = await fetch(`${BACKEND_URL}/profile/changePassword`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -57,9 +60,10 @@ export const changePassword = async (data: PasswordFormState) => {
   }
 };
 
+
 export const getSharedPosts = async () => {
   const token = await getToken();
-  const response = await fetch("http://localhost:4000/community/shared", {
+  const response = await fetch(`${BACKEND_URL}/community/shared`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -76,9 +80,10 @@ export const getSharedPosts = async () => {
 };
 
 
+
 export const deleteSharedPost = async (postId: string) => {
   const token = await getToken();
-  const response = await fetch(`http://localhost:4000/community/shared/${postId}`, {
+  const response = await fetch(`${BACKEND_URL}/community/shared/${postId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",

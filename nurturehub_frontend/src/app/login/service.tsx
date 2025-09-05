@@ -4,8 +4,10 @@ import { tokenManagementService } from "../tokenManagement/service";
 import { LoginDTO } from "./model";
 import { cookies } from "next/headers";
 
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+
 export const login = async (data: LoginDTO) => {
-  const response = await fetch("http://localhost:4000/auth/login", {
+  const response = await fetch(`${BACKEND_URL}/auth/login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -13,7 +15,6 @@ export const login = async (data: LoginDTO) => {
     body: JSON.stringify(data),
   });
   if (!response.ok) {
-
     throw new Error("Login failed");
   }
   const result = await response.json();
