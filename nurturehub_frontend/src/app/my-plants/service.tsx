@@ -8,7 +8,7 @@ const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:400
 
 export const savePlant = async (data: plantDTO) => {
   const token = await getToken();
-  const response = await fetch("http://localhost:4000/myplant", {
+  const response = await fetch(`${BACKEND_URL}/myplants`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
