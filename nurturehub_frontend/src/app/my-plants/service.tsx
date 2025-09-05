@@ -26,7 +26,7 @@ export const savePlant = async (data: plantDTO) => {
 export const getPlantsByUserId = async () => {
   const token = await getToken();
 
-  const response = await fetch(`h${BACKEND_URL}/myplant`, {
+  const response = await fetch(`${BACKEND_URL}/myplant`, {
     method: "GET",
     headers: {
       authorization: "Bearer " + token,
