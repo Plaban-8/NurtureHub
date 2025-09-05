@@ -26,7 +26,7 @@ export const savePlant = async (data: plantDTO) => {
 export const getPlantsByUserId = async () => {
   const token = await getToken();
 
-  const response = await fetch(`http://localhost:4000/myplant`, {
+  const response = await fetch(`h${BACKEND_URL}/myplant`, {
     method: "GET",
     headers: {
       authorization: "Bearer " + token,
@@ -40,7 +40,7 @@ export const getPlantsByUserId = async () => {
 };
 
 export const deletePlantById = async (id: string) => {
-  const response = await fetch(`http://localhost:4000/myplant/`, {
+  const response = await fetch(`${BACKEND_URL}/myplant`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const deletePlantById = async (id: string) => {
 };
 
 export const logWater = async (id: string, name: string) => {
-  const response = await fetch(`http://localhost:4000/myplant/${id}/water`, {
+  const response = await fetch(`${BACKEND_URL}/myplant/${id}/water`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -71,7 +71,7 @@ export const logWater = async (id: string, name: string) => {
 
 export const getUserByPlantId = async (plantId: string) => {
   const response = await fetch(
-    `http://localhost:4000/myplant/user/${plantId}`,
+    `${BACKEND_URL}/myplant/user/${plantId}`,
     {
       method: "GET",
       headers: {
@@ -94,7 +94,7 @@ export const notifyService = async (plantId: string, name: string) => {
     subject: "Watering Reminder",
     message: `It's time to water your plant: ${name}`,
   };
-  const response = await fetch(`http://localhost:4000/notification/sendemail`, {
+  const response = await fetch(`${BACKEND_URL}/notification/sendemail`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
