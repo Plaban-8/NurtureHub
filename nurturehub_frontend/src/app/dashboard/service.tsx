@@ -1,5 +1,5 @@
 "use server";
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 import { getToken } from "../tokenManagement/service";
 import { PasswordFormState, userDTO } from "./model";
 import { Post } from "../community/model";

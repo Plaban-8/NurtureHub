@@ -4,7 +4,7 @@ import { revalidatePath } from "next/cache";
 import { getToken } from "../tokenManagement/service";
 import { marketDTO, newMarket } from "./model";
 
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:4000";
+const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const postMarket = async (data: newMarket) => {
   const token = await getToken();
