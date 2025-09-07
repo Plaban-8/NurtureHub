@@ -12,7 +12,6 @@ const plantSchema = new mongoose.Schema({
   },
   photo: {
     type: String,
-    lowercase: true,
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,

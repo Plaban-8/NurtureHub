@@ -10,16 +10,18 @@ import { postMarket, getMarketPosts } from "./service";
 
 // Data (simulating a database fetch)
 interface Props {
-    data: {
-        posts: marketDTO[];
-    }
+  data: {
+    posts: marketDTO[];
+  };
 }
 // Main Component
 export default function MarketplaceView(props: Props) {
   const [listings, setListings] = useState<newMarket[]>([]);
   const [posts, setPosts] = useState<marketDTO[]>(props.data.posts);
   const [isCreating, setIsCreating] = useState(false);
-  const [selectedListing, setSelectedListing] = useState<marketDTO | null>(null);
+  const [selectedListing, setSelectedListing] = useState<marketDTO | null>(
+    null
+  );
   // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -55,11 +57,11 @@ export default function MarketplaceView(props: Props) {
       photo: photo ? photo : "https://placehold.co/600x400.png",
     };
 
-    try{
-        await postMarket(newListing);
-        window.location.reload();
-    }catch(err){
-        console.log(err)
+    try {
+      await postMarket(newListing);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
     }
     setListings((prevListings) => [newListing, ...prevListings]);
 
@@ -216,7 +218,7 @@ export default function MarketplaceView(props: Props) {
                 </h2>
               </div>
               <p className="text-sm text-gray-500 mt-1">
-                Listed by {listing.user}
+                Listed by {listing.name}
               </p>
               <p className="text-gray-700 mt-2 flex-grow">
                 {listing.description}
@@ -242,7 +244,7 @@ export default function MarketplaceView(props: Props) {
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm mx-auto">
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-xl font-bold text-gray-800">
-                Contact {selectedListing.user}
+                Contact {selectedListing.name}
               </h2>
               <button
                 onClick={closeModal}
