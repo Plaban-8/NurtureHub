@@ -99,7 +99,6 @@ export const dislike = async (id: string) => {
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify({"id": id}),
   })
-  revalidatePath('/community');
   if(!response.ok){
     throw new Error("failed in frontend service.")
   }
