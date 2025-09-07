@@ -12,12 +12,13 @@ import {
 import { Post, newPost } from "./model";
 import { addComment, createPost, dislike, like, sharePost } from "./service";
 import { add, formatDistanceToNow } from "date-fns";
+import { useRouter } from "next/navigation";
 
 interface Props {
   data: { posts: Post[] };
 }
-
 export default function CommunityView({ data }: Props) {
+  const router = useRouter();
   const [posts, setPosts] = useState<Post[]>(data.posts || []);
   const [newPostContent, setNewPostContent] = useState("");
   const [newPostFile, setNewPostFile] = useState<File | null>(null);
@@ -27,7 +28,7 @@ export default function CommunityView({ data }: Props) {
   >(null);
   const [commentContent, setCommentContent] = useState("");
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
-
+  
   useEffect(() => {
     setPosts(data.posts);
   }, [data.posts]);
@@ -91,25 +92,28 @@ export default function CommunityView({ data }: Props) {
   };
 
   const handleLike = async (postId: string) => {
-    const alreadyLiked = likedPosts.has(postId);
-    try {
+  const alreadyLiked = likedPosts.has(postId);
+
+  try {
+    if (alreadyLiked) {
+      await dislike(postId);
+    } else {
       await like(postId);
-    } catch (err) {
-      console.error(err);
     }
+
+    // optimistic UI update
     setLikedPosts((prev) => {
       const updated = new Set(prev);
-      if (alreadyLiked) {
-        dislike(postId);
-        updated.delete(postId);
-      } else {
-        updated.add(postId);
-      }
+      alreadyLiked ? updated.delete(postId) : updated.add(postId);
       return updated;
     });
 
-    
-  };
+    router.refresh(); // 🔄 sync likes count
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 
   const handleShare = async (postId: string) => {
     try {
