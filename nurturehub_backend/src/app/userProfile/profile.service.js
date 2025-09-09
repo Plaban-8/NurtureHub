@@ -15,6 +15,7 @@ export const getUserService = async (id) => {
       name: user.name,
       email: user.email,
       phone: user.phone,
+      dateOfBirth: user.dateOfBirth,
     },
   };
 };
