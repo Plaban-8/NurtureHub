@@ -14,10 +14,12 @@ export const login = async (data: LoginDTO) => {
     },
     body: JSON.stringify(data),
   });
+  console.log( response)
   if (!response.ok) {
     throw new Error("Login failed");
   }
   const result = await response.json();
+
   await tokenManagementService(result.token);
 };
 

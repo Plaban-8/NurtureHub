@@ -14,6 +14,7 @@ export default function SignupPage() {
       name: (e.target as any).fullName.value,
       email: (e.target as any).email.value,
       phone: (e.target as any).phone.value,
+      dateOfBirth: new Date((e.target as any).dob.value),
       password: (e.target as any).password.value,
       confirmPassword: (e.target as any).confirmPassword.value,
     };
@@ -92,6 +93,21 @@ export default function SignupPage() {
                 id="phone"
                 type="phone"
                 placeholder="xxxxxxxxxxx"
+                required
+                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm text-black"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="DOB"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Date of Birth
+              </label>
+              <input
+                id="dob"
+                type="date"
+                placeholder="yyyy-mm-dd"
                 required
                 className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm text-black"
               />

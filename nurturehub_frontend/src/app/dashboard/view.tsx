@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, FormEvent, useEffect } from "react";
-import { Mail, Phone, Trash2 } from "lucide-react";
+import { Mail, Phone, Trash2, Calendar } from "lucide-react";
 import Image from "next/image";
 import { PasswordFormState, userDTO } from "./model";
 import {
@@ -31,6 +31,7 @@ interface ProfileInfoFormState {
   name: string;
   email: string;
   phone: string;
+  dateOfBirth: Date;
 }
 
 interface PlantSuggestionQuery {
@@ -99,6 +100,7 @@ export default function DashboardView(props: Props) {
     name: "",
     email: "",
     phone: "",
+    dateOfBirth: new Date(),
   });
   const profile = props.data.user;
 
@@ -107,6 +109,7 @@ export default function DashboardView(props: Props) {
       name: profile.name,
       email: profile.email,
       phone: profile.phone,
+      dateOfBirth: profile.dateOfBirth,
     });
   }, [profile]);
 
@@ -142,6 +145,7 @@ export default function DashboardView(props: Props) {
       name: profileInfo.name,
       email: profileInfo.email,
       phone: profileInfo.phone,
+      dateOfBirth: profileInfo.dateOfBirth || new Date(),
     };
 
     try {
@@ -717,6 +721,20 @@ export default function DashboardView(props: Props) {
             <div className="flex items-center gap-2 text-gray-600">
               <Phone className="h-4 w-4 text-gray-400" />
               <span>{profileInfo.phone}</span>
+            </div>
+
+            <div className="flex items-center gap-2 text-gray-600">
+              <Calendar className="h-4 w-4 text-gray-400" />
+              <span>
+                {(() => {
+                  const dob = profileInfo.dateOfBirth;
+                  const dobDate = dob instanceof Date ? dob : new Date(dob);
+                  const formattedDob = isNaN(dobDate.getTime())
+                    ? ""
+                    : dobDate.toLocaleDateString();
+                  return formattedDob;
+                })()}
+              </span>
             </div>
           </div>
         </div>
