@@ -10,7 +10,8 @@ marketController.post('/', authenticate, async (req, res) => {
     description: req.body.description,
     price: req.body.price,
     photo: req.body.photo,
-    userId: req.id
+    userId: req.id,
+    date: req.body.date,
   }
 
   try{

@@ -19,14 +19,13 @@ export default function MarketplaceView(props: Props) {
   const [listings, setListings] = useState<newMarket[]>([]);
   const [posts, setPosts] = useState<marketDTO[]>(props.data.posts);
   const [isCreating, setIsCreating] = useState(false);
-  const [selectedListing, setSelectedListing] = useState<marketDTO | null>(
-    null
-  );
+  const [selectedListing, setSelectedListing] = useState<marketDTO | null>(null);
   // Form state
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [photo, setPhoto] = useState<string | null>(null);
+  const [date, setDate] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handlePhotoUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -55,6 +54,7 @@ export default function MarketplaceView(props: Props) {
       description,
       price: price || "Free",
       photo: photo ? photo : "https://placehold.co/600x400.png",
+      date: date || new Date().toISOString().slice(0, 10),
     };
 
     try {
@@ -70,6 +70,7 @@ export default function MarketplaceView(props: Props) {
     setDescription("");
     setPrice("");
     setPhoto(null);
+    setDate("");
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -150,6 +151,21 @@ export default function MarketplaceView(props: Props) {
               />
             </div>
             <div>
+              <label
+                htmlFor="date"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Date
+              </label>
+              <input
+                type="date"
+                id="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 sm:text-sm"
+              />
+            </div>
+            <div>
               <label className="block text-sm font-medium text-gray-700">
                 Photo
               </label>
@@ -217,9 +233,20 @@ export default function MarketplaceView(props: Props) {
                   {listing.title}
                 </h2>
               </div>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-gray-700 mt-1">
                 Listed by {listing.name}
               </p>
+              {listing.date && (
+                <p className="text-xs text-gray-700 mt-1">
+                  Date: {(() => {
+                    const d = new Date(listing.date);
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const month = String(d.getMonth() + 1).padStart(2, '0');
+                    const year = d.getFullYear();
+                    return `${day}-${month}-${year}`;
+                  })()}
+                </p>
+              )}
               <p className="text-gray-700 mt-2 flex-grow">
                 {listing.description}
               </p>

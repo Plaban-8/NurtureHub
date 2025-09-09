@@ -11,5 +11,6 @@ export const getMarketListings = async () => {
         name: listing.userId?.name,
         email: listing.userId?.email,
         phone: listing.userId?.phone,
+        date: listing.date,
     }));
 }

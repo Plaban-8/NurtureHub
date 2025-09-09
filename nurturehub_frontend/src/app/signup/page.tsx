@@ -4,8 +4,9 @@ import { Leaf } from "lucide-react";
 import Link from "next/link";
 import { FormEvent } from "react";
 import { RegisterDTO } from "./model";
-import { register } from "module";
 import { signUpService } from "./service";
+
+import { AuroraBackground } from "@/components/ui/aurora-background";
 
 export default function SignupPage() {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -30,22 +31,19 @@ export default function SignupPage() {
   };
 
   return (
-    <main
-      className="flex min-h-screen flex-col items-center justify-center p-4 font-sans"
-      style={{ backgroundColor: "#F2FCF3" }}
-    >
-      <div className="w-full max-w-md rounded-lg bg-white shadow-2xl">
+    <AuroraBackground>
+      <div className="w-full max-w-md rounded-lg bg-white/90 dark:bg-zinc-800/90 shadow-2xl backdrop-blur-sm">
         <div className="p-6 text-center">
           <div className="mb-2 flex items-center justify-center">
             <Leaf className="h-8 w-8 text-green-600" />
             <h1
-              className="ml-2 text-4xl font-bold text-gray-800"
+              className="ml-2 text-4xl font-bold text-gray-800 dark:text-gray-100"
               style={{ fontFamily: "sans-serif" }}
             >
               NurtureHub
             </h1>
           </div>
-          <p className="text-gray-500">
+          <p className="text-gray-500 dark:text-gray-400">
             Create an account to start your journey.
           </p>
         </div>
@@ -54,7 +52,7 @@ export default function SignupPage() {
             <div>
               <label
                 htmlFor="fullName"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Full Name
               </label>
@@ -63,13 +61,13 @@ export default function SignupPage() {
                 type="text"
                 placeholder="Name"
                 required
-                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm text-black"
+                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 bg-white/50 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm dark:border-zinc-600 dark:bg-zinc-700/50 dark:text-white dark:placeholder-gray-500"
               />
             </div>
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Email
               </label>
@@ -78,13 +76,13 @@ export default function SignupPage() {
                 type="email"
                 placeholder="name@example.com"
                 required
-                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm text-black"
+                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 bg-white/50 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm dark:border-zinc-600 dark:bg-zinc-700/50 dark:text-white dark:placeholder-gray-500"
               />
             </div>
             <div>
               <label
                 htmlFor="phone"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Phone
               </label>
@@ -93,13 +91,13 @@ export default function SignupPage() {
                 type="phone"
                 placeholder="xxxxxxxxxxx"
                 required
-                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm text-black"
+                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 bg-white/50 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm dark:border-zinc-600 dark:bg-zinc-700/50 dark:text-white dark:placeholder-gray-500"
               />
             </div>
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Password
               </label>
@@ -108,13 +106,13 @@ export default function SignupPage() {
                 type="password"
                 placeholder="••••••••"
                 required
-                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm text-black"
+                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 bg-white/50 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm dark:border-zinc-600 dark:bg-zinc-700/50 dark:text-white dark:placeholder-gray-500"
               />
             </div>
             <div>
               <label
                 htmlFor="confirmPassword"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
               >
                 Confirm Password
               </label>
@@ -123,7 +121,7 @@ export default function SignupPage() {
                 type="password"
                 placeholder="••••••••"
                 required
-                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm text-black"
+                className="mt-1 block w-full appearance-none rounded-md border border-gray-300 bg-white/50 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-green-500 focus:outline-none focus:ring-green-500 sm:text-sm dark:border-zinc-600 dark:bg-zinc-700/50 dark:text-white dark:placeholder-gray-500"
               />
             </div>
             <button
@@ -136,30 +134,30 @@ export default function SignupPage() {
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-gray-300" />
+              <span className="w-full border-t border-gray-300 dark:border-zinc-600" />
             </div>
             <div className="relative flex justify-center text-xs uppercase">
-              <span className="bg-white px-2 text-gray-500">
+              <span className="bg-white/90 px-2 text-gray-500 dark:bg-zinc-800/90 dark:text-gray-400">
                 Or sign up with
               </span>
             </div>
           </div>
 
-          <button className="flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50">
+          <button className="flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50 dark:border-zinc-600 dark:bg-zinc-700 dark:text-gray-300 dark:hover:bg-zinc-600">
             Sign up with Google
           </button>
 
-          <p className="mt-6 text-center text-sm text-gray-500">
+          <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
             Already have an account?{" "}
             <Link
               href="/login"
-              className="font-semibold text-green-600 hover:underline"
+              className="font-semibold text-green-600 hover:underline dark:text-green-500"
             >
               Sign in
             </Link>
           </p>
         </div>
       </div>
-    </main>
+    </AuroraBackground>
   );
 }

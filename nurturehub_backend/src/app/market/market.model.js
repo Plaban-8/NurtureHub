@@ -26,6 +26,10 @@ const marketSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    date: {
+      type: String,
+      required: false,
+    },
   },
   { timestamps: true, collection: "markets" }
 );
